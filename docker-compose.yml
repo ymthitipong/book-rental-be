@@ -1,0 +1,12 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    container_name: book_rental_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: book_rental_db
+      PGDATA: /data/postgres
+    ports:
+      - 5003:5432
