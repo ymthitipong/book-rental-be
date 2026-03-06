@@ -1,12 +1,13 @@
+import type { ICounterRepository } from "@domain/repositories/counter.repository";
+import { CounterTypeormEntity } from "@infrastructure/config/typeorm/entities/counter.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import type { ICounterRepository } from "../../../domain/repositories/counter.repository";
-import { CounterTypeormEntity } from "../../config/typeorm/entities/counter.entity";
 
 @Injectable()
 export class CounterRepository implements ICounterRepository {
   private readonly publisherCounterName = "publisher";
+  private readonly authorCounterName = "author";
 
   constructor(
     @InjectRepository(CounterTypeormEntity)
@@ -24,6 +25,21 @@ export class CounterRepository implements ICounterRepository {
   async updatePublisherCounterNumber(counterNumber: number): Promise<void> {
     await this.counterTypeormRepository.update(
       { name: this.publisherCounterName },
+      { counterNumber },
+    );
+  }
+
+  async getAuthorCounterNumber(): Promise<number | null> {
+    const counterPersistenceData = await this.counterTypeormRepository.findOne({
+      where: { name: this.authorCounterName },
+    });
+
+    return counterPersistenceData?.counterNumber ?? null;
+  }
+
+  async updateAuthorCounterNumber(counterNumber: number): Promise<void> {
+    await this.counterTypeormRepository.update(
+      { name: this.authorCounterName },
       { counterNumber },
     );
   }

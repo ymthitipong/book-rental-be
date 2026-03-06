@@ -1,47 +1,56 @@
+import dayjs from "dayjs";
+
 interface AuthorProps {
   code: string;
-  fullName: string;
-  sortName: string;
-  yearOfBirth: string;
+  name: string;
+  yearOfBirth: number;
+  persistenceId?: number;
 }
 
 export class Author {
   private readonly _code: string;
-  private readonly _fullName: string;
-  private readonly _sortName: string;
-  private readonly _yearOfBirth: string;
+  private readonly _name: string;
+  private readonly _yearOfBirth: number;
+  private readonly _persistenceId: number | null;
 
   protected constructor(props: AuthorProps) {
     this._code = props.code;
-    this._fullName = props.fullName;
-    this._sortName = props.sortName;
+    this._name = props.name;
     this._yearOfBirth = props.yearOfBirth;
+    this._persistenceId = props.persistenceId ?? null;
   }
 
   static create(props: AuthorProps): Author {
     if (!this.validateCode(props.code)) {
       throw new Error(
-        "Invalid author code. Format must be AT followed by 8 digits (e.g., AT00000001)",
+        "Unable to create - Invalid author code. Format must be AT followed by 8 digits (e.g., AT00000001)",
       );
     }
 
-    return new Author(props);
+    if (!this.validateYearOfBirth(props.yearOfBirth)) {
+      throw new Error("Unable to create - Invalid author year of birth.");
+    }
+
+    return new Author({
+      ...props,
+      name: this.normalizeName(props.name),
+    });
   }
 
   get code(): string {
     return this._code;
   }
 
-  get fullName(): string {
-    return this._fullName;
+  get name(): string {
+    return this._name;
   }
 
-  get sortName(): string {
-    return this._sortName;
-  }
-
-  get yearOfBirth(): string {
+  get yearOfBirth(): number {
     return this._yearOfBirth;
+  }
+
+  get persistenceId(): number | null {
+    return this._persistenceId;
   }
 
   private static codePattern = /^AT\d{6}$/;
@@ -51,6 +60,17 @@ export class Author {
       return true;
     }
     return false;
+  }
+
+  private static validateYearOfBirth(yearOfBirth: number): boolean {
+    if (yearOfBirth > 0 && yearOfBirth <= dayjs().year()) {
+      return true;
+    }
+    return false;
+  } 
+
+  private static normalizeName(name: string): string {
+    return name.toUpperCase();
   }
 
   static toCode(counter: number): string {
@@ -67,7 +87,7 @@ export class Author {
     const authorCode = `AT${counter.toString().padStart(6, "0")}`;
     if (!this.validateCode(authorCode)) {
       throw new Error(
-        "Invalid author code. Format must be AT followed by 6 digits (e.g., AT000001)",
+        "Unable to transform - Invalid author code. Format must be AT followed by 6 digits (e.g., AT000001)",
       );
     }
 

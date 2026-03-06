@@ -1,10 +1,10 @@
+import { Publisher } from '@domain/entities/publisher.entity';
+import type { IPublisherRepository } from '@domain/repositories/publisher.repository';
+import { PublisherTypeormEntity } from '@infrastructure/config/typeorm/entities/publisher.entity';
+import { PublisherMapper } from '@infrastructure/persistence/mapper/publisher.mapper';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Publisher } from '../../../domain/entities/publisher.entity';
-import type { IPublisherRepository } from '../../../domain/repositories/publisher.repository';
-import { PublisherTypeormEntity } from '../../config/typeorm/entities/publisher.entity';
-import { PublisherMapper } from '../mapper/publisher.mapper';
 
 @Injectable()
 export class PublisherRepository implements IPublisherRepository {
@@ -14,14 +14,14 @@ export class PublisherRepository implements IPublisherRepository {
   ) {}
 
   async save(publisher: Publisher): Promise<Publisher> {
-    const publisherPersistenceData = await this.publisherTypeormRepository.save(
+    const savedPersistenceData = await this.publisherTypeormRepository.save(
       {
         code: publisher.code,
         name: publisher.name,
       },
     );
 
-    return PublisherMapper.toDomain(publisherPersistenceData);
+    return PublisherMapper.toDomain(savedPersistenceData);
   }
 
   async findByName(name: string): Promise<Publisher | null> {

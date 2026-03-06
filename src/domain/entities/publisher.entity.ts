@@ -24,7 +24,7 @@ export class Publisher {
 
     return new Publisher({
       ...props,
-      name: props.name.toUpperCase(), // always uppercase
+      name: this.normalizeName(props.name),
     });
   }
 
@@ -47,6 +47,10 @@ export class Publisher {
       return true;
     }
     return false;
+  }
+
+  private static normalizeName(name: string): string {
+    return name.toUpperCase();
   }
 
   static toCode(counter: number): string {
