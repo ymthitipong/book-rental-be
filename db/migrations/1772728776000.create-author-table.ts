@@ -25,7 +25,6 @@ export class CreateAuthorsTable implements MigrationInterface {
             type: 'char',
             length: '8',
             isNullable: false,
-            isUnique: true,
           },
           {
             name: 'year_of_birth',

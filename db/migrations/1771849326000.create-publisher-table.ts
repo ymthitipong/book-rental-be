@@ -19,14 +19,12 @@ export class CreatePublishersTable implements MigrationInterface {
             name: 'name',
             type: 'text',
             isNullable: false,
-            isUnique: true,
           },
           {
             name: 'code',
             type: 'char',
             length: '8',
             isNullable: false,
-            isUnique: true,
           },
           {
             name: 'created_at',
@@ -44,6 +42,12 @@ export class CreatePublishersTable implements MigrationInterface {
             name: 'deleted_at',
             type: 'timestamptz',
             isNullable: true,
+          },
+        ],
+        uniques: [
+          {
+            name: 'UQ_publisher_name',
+            columnNames: ['name'],
           },
         ],
         indices: [

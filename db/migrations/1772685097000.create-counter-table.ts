@@ -19,7 +19,6 @@ export class CreatePublishersTable implements MigrationInterface {
             name: 'name',
             type: 'text',
             isNullable: false,
-            isUnique: true,
           },
           {
             name: 'counter_number',
@@ -32,6 +31,12 @@ export class CreatePublishersTable implements MigrationInterface {
             type: 'timestamptz',
             default: 'CURRENT_TIMESTAMP',
             isNullable: false,
+          },
+        ],
+        uniques: [
+          {
+            name: 'UQ_counter_name',
+            columnNames: ['name'],
           },
         ],
       }),
