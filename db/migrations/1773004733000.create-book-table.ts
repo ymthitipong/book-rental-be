@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateAuthorsTable implements MigrationInterface {
-  name: string = 'createAuthorTable1772728776000';
+  name: string = 'createBookTable1773004733000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'author',
+        name: 'book',
         columns: [
           {
             name: 'id',
@@ -16,7 +16,7 @@ export class CreateAuthorsTable implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
-            name: 'name',
+            name: 'title',
             type: 'text',
             isNullable: false,
           },
@@ -28,9 +28,25 @@ export class CreateAuthorsTable implements MigrationInterface {
             isUnique: true,
           },
           {
-            name: 'year_of_birth',
-            type: 'integer',
+            name: 'category',
+            type: 'char',
+            length: '3',
             isNullable: false,
+          },
+          {
+            name: 'publisher_date',
+            type: 'date',
+            isNullable: true,
+          },
+          {
+            name: 'description',
+            type: 'text',
+            isNullable: true,
+          },
+          {
+            name: 'publisher_id',
+            type: 'integer',
+            isNullable: true,
           },
           {
             name: 'created_at',
@@ -48,19 +64,17 @@ export class CreateAuthorsTable implements MigrationInterface {
             isNullable: true,
           },
         ],
-        uniques: [
+        foreignKeys: [
           {
-            name: 'UQ_author_name_and_year_of_birth',
-            columnNames: ['name', 'year_of_birth'],
+            columnNames: ['publisher_id'],
+            referencedTableName: 'publisher',
+            referencedColumnNames: ['id'],
+            onDelete: 'CASCADE',
           },
         ],
         indices: [
           {
-            name: 'IDX_authors_name',
-            columnNames: ['name'],
-          },
-          {
-            name: 'IDX_authors_code',
+            name: 'IDX_book_code',
             columnNames: ['code'],
             isUnique: true,
           },
@@ -70,6 +84,6 @@ export class CreateAuthorsTable implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('author');
+    await queryRunner.dropTable('book');
   }
 }

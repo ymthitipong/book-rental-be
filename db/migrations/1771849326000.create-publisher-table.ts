@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreatePublishersTable implements MigrationInterface {
   name: string = 'createPublishersTable1771849326000';
@@ -23,7 +23,8 @@ export class CreatePublishersTable implements MigrationInterface {
           },
           {
             name: 'code',
-            type: 'text',
+            type: 'char',
+            length: '8',
             isNullable: false,
             isUnique: true,
           },
@@ -45,23 +46,13 @@ export class CreatePublishersTable implements MigrationInterface {
             isNullable: true,
           },
         ],
-      }),
-    );
-
-    // Create index on code for faster lookups
-    await queryRunner.createIndex(
-      'publisher',
-      new TableIndex({
-        name: 'IDX_publishers_code',
-        columnNames: ['code'],
-      }),
-    );
-
-    await queryRunner.createIndex(
-      'publisher',
-      new TableIndex({
-        name: 'IDX_publishers_name',
-        columnNames: ['name'],
+        indices: [
+          {
+            name: 'IDX_publishers_code',
+            columnNames: ['code'],
+            isUnique: true,
+          },
+        ],
       }),
     );
   }
