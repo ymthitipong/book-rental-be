@@ -9,7 +9,9 @@ export class AuthorTypeormEntity extends BaseEntity {
   @Column("text")
   name!: string;
 
-  @Column("text")
+  @Column("char", {
+    length: "8",
+  })
   code!: string;
 
   @Column("integer", {

@@ -1,4 +1,4 @@
-import type { ICounterRepository } from "@domain/repositories/counter.repository";
+import type { ICounterRepository } from "@domain/repositories/counter.repository.interface";
 import { CounterTypeormEntity } from "@infrastructure/config/typeorm/entities/counter.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";

@@ -2,6 +2,7 @@ import { HttpException } from '@nestjs/common';
 
 export interface IFormatExceptionMessage {
   message: string;
+  detail?: string;
 }
 
 export interface IException {

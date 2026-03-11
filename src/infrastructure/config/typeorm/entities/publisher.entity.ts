@@ -5,7 +5,9 @@ import { BaseEntity } from "./base";
 
 @Entity("publisher")
 export abstract class PublisherTypeormEntity extends BaseEntity {
-  @Column("text")
+  @Column("char", {
+    length: "8",
+  })
   code!: string;
 
   @Column("text")

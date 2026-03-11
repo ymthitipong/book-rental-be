@@ -1,23 +1,19 @@
 import { Book } from "@domain/entities/book.entity";
 
-enum BookCopyStatusEnum {
-  AVAILABLE = "AVAILABLE",
-  BORROWED = "BORROWED",
-  MAINTENANCE = "MAINTENANCE",
-}
+import { BookCopyStatus } from "@domain/constant/book-copy-status";
 
 interface BookCopyProps {
   acquisitionDate: string;
   book: Book;
   code: number;
-  status: BookCopyStatusEnum;
+  status: BookCopyStatus;
 }
 
 export class BookCopy {
   private readonly _book: Book;
   private readonly _acquisitionDate: string;
   private readonly _copy_no: number;
-  private readonly _status: BookCopyStatusEnum;
+  private readonly _status: BookCopyStatus;
 
   private constructor(props: BookCopyProps) {
     this._book = props.book;
@@ -46,7 +42,7 @@ export class BookCopy {
     return this._copy_no;
   }
 
-  get status(): string {
+  get status(): BookCopyStatus {
     return this._status;
   }
 }
