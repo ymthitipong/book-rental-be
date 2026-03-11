@@ -2,6 +2,7 @@ import { CreateAuthorUseCase } from '@application/use-cases/create-author.use-ca
 import { CreateBookUseCase } from '@application/use-cases/create-book.use-case';
 import { CreatePublisherUseCase } from '@application/use-cases/create-publisher.use-case';
 import { SearchAuthorByCodeUseCase } from '@application/use-cases/search-author-by-code.use-case';
+import { SearchAuthorsByPartialNameUseCase } from '@application/use-cases/search-authors-by-name.use-case';
 import { SearchPublisherByCodeUseCase } from '@application/use-cases/search-publisher-by-code.use-case';
 import { SearchPublishersByPartialNameUseCase } from '@application/use-cases/search-publishers-by-partial-name.use-case';
 import { ExceptionsModule } from '@infrastructure/exception/exceptions.module';
@@ -21,6 +22,7 @@ export class UsecaseProxyModule {
   static CREATE_PUBLISHER = 'CREATE_PUBLISHER';
   static CREATE_BOOK = 'CREATE_BOOK';
   static SEARCH_AUTHOR_BY_CODE = 'SEARCH_AUTHOR_BY_CODE';
+  static SEARCH_AUTHORS_BY_PARTIAL_NAME = 'SEARCH_AUTHORS_BY_PARTIAL_NAME';
   static SEARCH_PUBLISHER_BY_CODE = 'SEARCH_PUBLISHER_BY_CODE';
   static SEARCH_PUBLISHERS_BY_PARTIAL_NAME = 'SEARCH_PUBLISHERS_BY_PARTIAL_NAME';
 
@@ -99,8 +101,23 @@ export class UsecaseProxyModule {
               exceptionsService,
               loggerService,
             ),
-          },
-          {
+        },
+        {
+          inject: [
+            AuthorRepository,
+            LoggerService,
+          ],
+          provide: UsecaseProxyModule.SEARCH_AUTHORS_BY_PARTIAL_NAME,
+          useFactory: (
+            authorRepository: AuthorRepository,
+            loggerService: LoggerService,
+          ) =>
+            new SearchAuthorsByPartialNameUseCase(
+              authorRepository,
+              loggerService,
+            ),
+        },
+        {
           inject: [
             PublisherRepository,
             ExceptionsService,
@@ -117,31 +134,29 @@ export class UsecaseProxyModule {
               exceptionsService,
               loggerService,
             ),
-          },
-          {
+        },
+        {
           inject: [
             PublisherRepository,
-            ExceptionsService,
             LoggerService,
           ],
           provide: UsecaseProxyModule.SEARCH_PUBLISHERS_BY_PARTIAL_NAME,
           useFactory: (
             publisherRepository: PublisherRepository,
-            exceptionsService: ExceptionsService,
             loggerService: LoggerService,
           ) =>
             new SearchPublishersByPartialNameUseCase(
               publisherRepository,
-              exceptionsService,
               loggerService,
             ),
-          },
+        },
       ],
       exports: [
         UsecaseProxyModule.CREATE_AUTHOR,
         UsecaseProxyModule.CREATE_PUBLISHER,
         UsecaseProxyModule.CREATE_BOOK,
         UsecaseProxyModule.SEARCH_AUTHOR_BY_CODE,
+        UsecaseProxyModule.SEARCH_AUTHORS_BY_PARTIAL_NAME,
         UsecaseProxyModule.SEARCH_PUBLISHER_BY_CODE,
         UsecaseProxyModule.SEARCH_PUBLISHERS_BY_PARTIAL_NAME,
       ],
