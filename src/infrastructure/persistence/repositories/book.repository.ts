@@ -1,5 +1,6 @@
 import { Book } from "@domain/entities/book.entity";
 import { IBookRepository } from "@domain/repositories/book.repository.interface";
+import { BookCode } from "@domain/value-object/book-code";
 import { BookTypeormEntity } from "@infrastructure/config/typeorm/entities/book.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -13,9 +14,26 @@ export class BookRepository implements IBookRepository {
     private readonly bookTypeormRepository: Repository<BookTypeormEntity>,
   ) {}
 
-  async findByCode(code: string): Promise<Book | null> {
+  async findById(id: number): Promise<Book | null> {
     const bookPersistenceData = await this.bookTypeormRepository.findOne({
-      where: { code },
+      where: { id },
+      relations: {
+        publisher: true,
+        copies: true,
+        authors: true,
+      },
+    });
+    
+    if (!bookPersistenceData) {
+      return null;
+    }
+    
+    return BookMapper.toDomain(bookPersistenceData);
+  }
+
+  async findByCode(code: BookCode): Promise<Book | null> {
+    const bookPersistenceData = await this.bookTypeormRepository.findOne({
+      where: { code: code.value },
       relations: {
         publisher: true,
         copies: true,
@@ -33,10 +51,40 @@ export class BookRepository implements IBookRepository {
   }
 
   async save(book: Book): Promise<Book> {
-    // const savedPersistenceData = await this.bookTypeormRepository.create({
+    const { id } = await this.bookTypeormRepository.save({
+      title: book.title.value,
+      code: book.code.value,
+      category: book.category.code,
+      description: book.description,
+      publicationDate: book.publicationDate,
+      publisher: book.publisher?.persistenceId
+        ? { id: book.publisher.persistenceId } 
+        : null,
+      authors: book.authors
+        .filter(
+          (author): author is typeof author & { persistenceId: number } => 
+            author.persistenceId !== null
+        )
+        .map(
+          (author) => ({
+            id: author.persistenceId
+          })
+        )
+    });
 
-    // });
+    const savedPersistenceData = await this.bookTypeormRepository.findOne({
+      where: { id },
+      relations: {
+        publisher: true, 
+        copies: true,
+        authors: true,
+      },
+    });
 
-    throw new Error('Method not implemented.');
+    if (!savedPersistenceData) {
+      throw new Error('Failed to create book');
+    }
+
+    return BookMapper.toDomain(savedPersistenceData);
   }
 }

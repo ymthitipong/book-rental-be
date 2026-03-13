@@ -3,7 +3,7 @@ import { SearchAuthorByCodeUseCase } from '@application/use-cases/search-author-
 import { Author } from '@domain/entities/author.entity';
 import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
-import { IAuthorResponse, toAuthorResponse } from '@presenter/responses/author.response';
+import { IAuthorResponse, toAuthorResponse } from '@presenter/responses/author.response.dto';
 import { CreateAuthorRequestBodyDto } from './create-author.request.dto';
 import { SearchAuthorByCodeRequestParamDto } from './search-author-by-code.request.dto';
 

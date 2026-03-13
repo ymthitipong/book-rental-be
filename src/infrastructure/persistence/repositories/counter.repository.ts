@@ -8,6 +8,7 @@ import { Repository } from "typeorm";
 export class CounterRepository implements ICounterRepository {
   private readonly publisherCounterName = "publisher";
   private readonly authorCounterName = "author";
+  private readonly bookCounterName = "book";
 
   constructor(
     @InjectRepository(CounterTypeormEntity)
@@ -40,6 +41,21 @@ export class CounterRepository implements ICounterRepository {
   async updateAuthorCounterNumber(counterNumber: number): Promise<void> {
     await this.counterTypeormRepository.update(
       { name: this.authorCounterName },
+      { counterNumber },
+    );
+  }
+
+  async getBookCounterNumber(): Promise<number | null> {
+    const counterPersistenceData = await this.counterTypeormRepository.findOne({
+      where: { name: this.bookCounterName },
+    });
+
+    return counterPersistenceData?.counterNumber ?? null;
+  }
+
+  async updateBookCounterNumber(counterNumber: number): Promise<void> {
+    await this.counterTypeormRepository.update(
+      { name: this.bookCounterName },
       { counterNumber },
     );
   }

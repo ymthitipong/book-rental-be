@@ -16,7 +16,11 @@ import { PublisherRepository } from '@infrastructure/persistence/repositories/pu
 import { RepositoryModule } from '@infrastructure/persistence/repositories/repository.module';
 import { DynamicModule, Module } from '@nestjs/common';
 
-@Module({ imports: [ExceptionsModule, RepositoryModule, LoggerModule] })
+@Module({ imports: [
+  ExceptionsModule,
+  RepositoryModule,
+  LoggerModule,
+]})
 export class UsecaseProxyModule {
   static CREATE_AUTHOR = 'CREATE_AUTHOR';
   static CREATE_PUBLISHER = 'CREATE_PUBLISHER';
@@ -74,14 +78,23 @@ export class UsecaseProxyModule {
         },
         {
           inject: [
+            AuthorRepository,
             BookRepository,
+            CounterRepository,
+            PublisherRepository,
           ],
           provide: UsecaseProxyModule.CREATE_BOOK,
           useFactory: (
+            authorRepository: AuthorRepository,
             bookRepository: BookRepository,
+            counterRepository: CounterRepository,
+            publisherRepository: PublisherRepository,
           ) =>
             new CreateBookUseCase(
+              authorRepository,
               bookRepository,
+              counterRepository,
+              publisherRepository,
             ),
         },
         {

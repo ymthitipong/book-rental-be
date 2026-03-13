@@ -2,8 +2,8 @@ import { SearchAuthorsByPartialNameUseCase } from '@application/use-cases/search
 import { Author } from '@domain/entities/author.entity';
 import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
 import { Controller, Get, Inject, Query } from '@nestjs/common';
-import { IAuthorResponse, toAuthorResponse } from '@presenter/responses/author.response';
-import { IListResponse, toListResponse } from '@presenter/responses/list.response';
+import { IAuthorResponse, toAuthorResponse } from '@presenter/responses/author.response.dto';
+import { IListResponse, toListResponse } from '@presenter/responses/list.response.dto';
 import { SearchAuthorsByPartialNameRequestQueryDto } from './search-authors-by-partial-name.request.dto';
 
 @Controller('authors')

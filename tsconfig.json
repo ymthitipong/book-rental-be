@@ -22,11 +22,11 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@core": [
-        "src/core"
+      "@common": [
+        "src/common"
       ],
-      "@core/*": [
-        "src/core/*"
+      "@common/*": [
+        "src/common/*"
       ],
       "@application": [
         "src/application"

@@ -18,12 +18,4 @@ export class PublisherMapper {
       code: PublisherCode.create(typeorm.code),
     });
   }
-
-  static toPersistence(domain: Publisher): PublisherPersistence {
-    return {
-      id: domain.persistenceId,
-      code: domain.code.value,
-      name: domain.name.value,
-    };
-  }
 }

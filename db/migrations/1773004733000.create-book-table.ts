@@ -33,7 +33,7 @@ export class CreateAuthorsTable implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'publisher_date',
+            name: 'publication_date',
             type: 'date',
             isNullable: true,
           },

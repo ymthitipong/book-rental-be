@@ -1,6 +1,6 @@
 import { Book } from "@domain/entities/book.entity";
 
-import { BookCopyStatus } from "@domain/constant/book-copy-status";
+import { BookCopyStatus } from "@domain/constant/book-copy-status.constant";
 
 interface BookCopyProps {
   acquisitionDate: string;

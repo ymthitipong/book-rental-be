@@ -5,6 +5,7 @@ import { BookTypeormEntity } from '@infrastructure/config/typeorm/entities/book.
 import { CounterTypeormEntity } from '@infrastructure/config/typeorm/entities/counter.entity';
 import { PublisherTypeormEntity } from '@infrastructure/config/typeorm/entities/publisher.entity';
 import { TypeOrmConfigModule } from '@infrastructure/config/typeorm/typeorm.module';
+import { LoggerModule } from '@infrastructure/logger/logger.module';
 import { AuthorRepository } from '@infrastructure/persistence/repositories/author.repository';
 import { BookRepository } from '@infrastructure/persistence/repositories/book.repository';
 import { CounterRepository } from '@infrastructure/persistence/repositories/counter.repository';
@@ -23,6 +24,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       BookCopyTypeormEntity,
       AuthorBookMappingTypeormEntity,
     ]),
+    LoggerModule,
   ],
   providers: [
     PublisherRepository,

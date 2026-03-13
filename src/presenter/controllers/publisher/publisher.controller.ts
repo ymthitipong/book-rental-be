@@ -3,7 +3,7 @@ import { SearchPublisherByCodeUseCase } from '@application/use-cases/search-publ
 import { Publisher } from '@domain/entities/publisher.entity';
 import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
-import { IPublisherResponse, toPublisherResponse } from '@presenter/responses/publisher.response';
+import { IPublisherResponse, toPublisherResponse } from '@presenter/responses/publisher.response.dto';
 import { CreatePublisherRequestBodyDto } from './create-publisher.request.dto';
 import { SearchAuthorByCodeRequestParamDto } from './search-publisher-by-code.request.dto';
 

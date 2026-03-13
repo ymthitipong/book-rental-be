@@ -28,9 +28,9 @@ export class BookTypeormEntity extends BaseEntity {
   category!: string;
 
   @Column("date", {
-    name: "publisher_date",
+    name: "publication_date",
   })
-  publisherDate!: Date | null;
+  publicationDate!: string | null;
 
   @Column("text", {
     nullable: true,

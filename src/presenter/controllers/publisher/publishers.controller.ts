@@ -2,8 +2,8 @@ import { SearchPublishersByPartialNameUseCase } from '@application/use-cases/sea
 import { Publisher } from '@domain/entities/publisher.entity';
 import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
 import { Controller, Get, Inject, Query } from '@nestjs/common';
-import { IListResponse, toListResponse } from '@presenter/responses/list.response';
-import { IPublisherResponse, toPublisherResponse } from '@presenter/responses/publisher.response';
+import { IListResponse, toListResponse } from '@presenter/responses/list.response.dto';
+import { IPublisherResponse, toPublisherResponse } from '@presenter/responses/publisher.response.dto';
 import { SearchPublishersByPartialNameRequestQueryDto } from './search-publishers-by-partial-name.request.dto';
 
 @Controller('publishers')

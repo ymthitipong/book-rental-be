@@ -6,7 +6,7 @@ import { AuthorTypeormEntity } from '@infrastructure/config/typeorm/entities/aut
 import { AuthorMapper } from '@infrastructure/persistence/mapper/author.mapper';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 
 @Injectable()
 export class AuthorRepository implements IAuthorRepository {
@@ -28,13 +28,21 @@ export class AuthorRepository implements IAuthorRepository {
     return AuthorMapper.toDomain(authorPersistenceData);
   }
 
-   async findAllByPartialName(name: AuthorName): Promise<Author[]> {
-      const authorPersistenceData = await this.authorTypeormRepository.find({
-        where: { name: Like(`%${name.value}%`) },
-      });
-      
-      return authorPersistenceData.map(AuthorMapper.toDomain);
-    }
+  async findAllByPartialName(name: AuthorName): Promise<Author[]> {
+    const authorPersistenceData = await this.authorTypeormRepository.find({
+      where: { name: Like(`%${name.value}%`) },
+    });
+  
+    return authorPersistenceData.map(AuthorMapper.toDomain);
+  }
+
+  async findByCodes(codes: AuthorCode[]): Promise<Author[]> {
+    const authorPersistenceData = await this.authorTypeormRepository.find({
+      where: { code: In(codes.map((code) => code.value)) },
+    });
+  
+    return authorPersistenceData.map(AuthorMapper.toDomain);
+  }
 
   async save(author: Author): Promise<Author> {
     const savedAuthor = await this.authorTypeormRepository.save({

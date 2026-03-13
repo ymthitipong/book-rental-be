@@ -1,3 +1,4 @@
+import { BookCategory } from "@domain/value-object/book-category";
 import { BookCode } from "@domain/value-object/book-code";
 import { BookTitle } from "@domain/value-object/book-title";
 import { Author } from "./author.entity";
@@ -5,24 +6,25 @@ import { Publisher } from "./publisher.entity";
 
 interface BookProps {
   authors: Author[];
-  category: string;
-  code: BookCode;
+  category: BookCategory;
+  code: BookCode; 
   description?: string | null;
   persistenceId?: number | null;
-  publicationDate?: Date | null;
+  publicationDate?: string | null;
   publisher?: Publisher | null;
   title: BookTitle;
 }
 
 export class Book {
   private readonly _authors: Author[];
-  private readonly _category: string;
+  private readonly _category: BookCategory;
   private readonly _code: BookCode; 
   private readonly _description: string | null;
-  private readonly _persistenceId: number | null;
-  private readonly _publicationDate: Date | null;
+  private readonly _publicationDate: string | null;
   private readonly _publisher: Publisher | null;
   private readonly _title: BookTitle;
+
+  private _persistenceId: number | null;
 
   private constructor(props: BookProps) {
     this._authors = props.authors;
@@ -43,7 +45,7 @@ export class Book {
     return this._authors;
   }
 
-  get category(): string {
+  get category(): BookCategory {
     return this._category;
   }
 
@@ -59,7 +61,7 @@ export class Book {
     return this._persistenceId;
   }
 
-  get publicationDate(): Date | null {
+  get publicationDate(): string | null {
     return this._publicationDate;
   }
 
@@ -69,5 +71,9 @@ export class Book {
 
   get title(): BookTitle {
     return this._title;
+  }
+
+  protected updatePersistenceId(persistenceId: number) {
+    this._persistenceId = persistenceId;
   }
 }

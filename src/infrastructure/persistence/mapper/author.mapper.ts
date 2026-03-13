@@ -19,13 +19,4 @@ export class AuthorMapper {
       persistenceId: typeorm.id,
     });
   }
-
-  static toPersistence(author: Author): AuthorPersistence {
-    return {
-      id: author.persistenceId ?? null,
-      code: author.code.value,
-      name: author.name.value,
-      yearOfBirth: author.yearOfBirth,
-    };
-  }
 }
