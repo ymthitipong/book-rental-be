@@ -72,6 +72,7 @@ export class BookRepository implements IBookRepository {
         )
     });
 
+    // Todo: need adjustment for 2 db traffic -> only 1
     const savedPersistenceData = await this.bookTypeormRepository.findOne({
       where: { id },
       relations: {
