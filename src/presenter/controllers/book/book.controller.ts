@@ -21,13 +21,13 @@ export class BookController {
   }
 
   @Post()
-  async create(@Body() createBookDto: CreatePublisherRequestBodyDto) {
+  async create(@Body() createBookDto: CreatePublisherRequestBodyDto): Promise<IBookResponse> {
     const book = await this.createBookUseCase.execute(createBookDto);
     return this.toResponse(book);
   }
 
   @Get(':code')
-  async findByCode(@Param() params: SearchBookByCodePararmsDto) {
+  async searchByCode(@Param() params: SearchBookByCodePararmsDto): Promise<IBookResponse> {
     const book = await this.searchBookByCodeUseCase.execute(params.code);
     return this.toResponse(book);
   }
