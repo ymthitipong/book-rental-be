@@ -1,5 +1,6 @@
 import { Publisher } from '@domain/entities/publisher.entity';
 import type { IPublisherRepository } from '@domain/repositories/publisher.repository.interface';
+import { RepositoryOrderSelectionType } from '@domain/repositories/repository.interface';
 import { PublisherCode } from '@domain/value-object/publisher-code';
 import { PublisherName } from '@domain/value-object/publisher-name';
 import { PublisherTypeormEntity } from '@infrastructure/config/typeorm/entities/publisher.entity';
@@ -26,9 +27,22 @@ export class PublisherRepository implements IPublisherRepository {
     return PublisherMapper.toDomain(publisherPersistenceData);
   }
   
-  async findAllByPartialName(name: PublisherName): Promise<Publisher[]> {
+  async findAll(props: {
+    name?: PublisherName;
+  }, options: {
+    limit?: number;
+    order?: {
+      [key in 'name']: RepositoryOrderSelectionType;
+    };
+  }): Promise<Publisher[]> {
     const publisherPersistenceData = await this.publisherTypeormRepository.find({
-      where: { name: Like(`%${name.value}%`) },
+      where: {
+        name: props.name 
+          ? Like(`%${props.name.value}%`)
+          : undefined,
+      },
+      take: options.limit || 100,
+      order: options.order || undefined,
     });
     
     return publisherPersistenceData.map(PublisherMapper.toDomain);

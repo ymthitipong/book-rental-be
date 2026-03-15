@@ -1,0 +1,1 @@
+export type RepositoryOrderSelectionType = 'asc' | 'desc';
