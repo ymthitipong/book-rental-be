@@ -31,7 +31,11 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'off',
-      "prettier/prettier": ["error", { endOfLine: "auto" }],
+      "prettier/prettier": ["error", {
+        endOfLine: "auto",
+        semi: true,
+        trailingComma: 'all'
+      }],
       "perfectionist/sort-interfaces": [
         "error",
         {

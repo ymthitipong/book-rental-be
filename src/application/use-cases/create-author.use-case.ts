@@ -26,7 +26,7 @@ export class CreateAuthorUseCase {
       throw this.exception.internalServerErrorException({
         message: "Failed to get author counter number",
       });
-    }
+    };
 
     const author = Author.create({
       code: AuthorCode.create(counter),

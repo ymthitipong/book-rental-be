@@ -1,5 +1,6 @@
 import { Author } from '@domain/entities/author.entity';
 import type { IAuthorRepository } from '@domain/repositories/author.repository.interface';
+import { RepositoryOrderSelectionType } from '@domain/repositories/repository.interface';
 import { AuthorCode } from '@domain/value-object/author-code';
 import { AuthorName } from '@domain/value-object/author-name';
 import { AuthorTypeormEntity } from '@infrastructure/config/typeorm/entities/author.entity';
@@ -28,9 +29,21 @@ export class AuthorRepository implements IAuthorRepository {
     return AuthorMapper.toDomain(authorPersistenceData);
   }
 
-  async findAllByPartialName(name: AuthorName): Promise<Author[]> {
+  async findAll(props: {
+    name?: AuthorName;
+  }, options: {
+    limit?: number;
+    order?: {
+      [key in 'name']: RepositoryOrderSelectionType;
+    };
+  }): Promise<Author[]> {
+
     const authorPersistenceData = await this.authorTypeormRepository.find({
-      where: { name: Like(`%${name.value}%`) },
+      where: {
+        name: props.name ? Like(`%${props.name.value}%`) : undefined,
+      },
+      take: options.limit || 100,
+      order: options.order || undefined,
     });
   
     return authorPersistenceData.map(AuthorMapper.toDomain);
