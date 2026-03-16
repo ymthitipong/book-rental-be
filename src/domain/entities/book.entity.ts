@@ -102,22 +102,7 @@ export class Book {
     return this._lastCopyNo;
   }
 
-  update(props: {
-    availableCopyCount?: number;
-    lastCopyNo?: number;
-    totalCopyCount?: number;
-  }): void {
-    this._availableCopyCount =
-      props.availableCopyCount ?? this._availableCopyCount;
-    this._lastCopyNo = props.lastCopyNo ?? this._lastCopyNo;
-    this._totalCopyCount = props.totalCopyCount ?? this._totalCopyCount;
-  }
-
-  createNewCopies(count: number): {
-    newCopies: BookCopy[];
-    newLastCopyNo: number;
-    count: number;
-  } {
+  createNewCopies(count: number): BookCopy[] {
     console.log("lastCopyNo", this._lastCopyNo);
     const fromNo = (this._lastCopyNo ?? -1) + 1;
 
@@ -129,10 +114,11 @@ export class Book {
       });
     });
 
-    return {
-      count,
-      newCopies,
-      newLastCopyNo: fromNo + count - 1,
-    };
+    this._copies.push(...newCopies);
+    this._lastCopyNo = fromNo + count - 1;
+    this._totalCopyCount += count;
+    this._availableCopyCount += count;
+    
+    return newCopies;
   }
 }

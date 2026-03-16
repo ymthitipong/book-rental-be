@@ -40,25 +40,16 @@ export class CreateCopiesByBookUseCase {
       throw new Error("Book not found");
     }
 
-    const { newCopies, newLastCopyNo } = book.createNewCopies(copyCount);
+    const newCopies = book.createNewCopies(copyCount);
     await this.bookCopyRepository.saveAllWithBookId(
       newCopies,
       book.persistenceId!,
     );
 
-    const newAvailableCopyCount = book.availableCopyCount + copyCount;
-    const newTotalCopyCount = book.totalCopyCount + copyCount;
-    
     await this.bookRepository.updateById(book.persistenceId!, {
-      availableCopyCount: newAvailableCopyCount,
-      lastCopyNo: newLastCopyNo,
-      totalCopyCount: newTotalCopyCount,
-    });
-
-    book.update({
-      availableCopyCount: newAvailableCopyCount,
-      lastCopyNo: newLastCopyNo,
-      totalCopyCount: newTotalCopyCount,
+      availableCopyCount: book.availableCopyCount,
+      lastCopyNo: book.lastCopyNo!,
+      totalCopyCount: book.totalCopyCount,
     });
 
     return {

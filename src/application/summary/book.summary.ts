@@ -58,7 +58,6 @@ export const BookSummaryMapper = {
     };
   },
 
-
   toSummaryWithCopiesList: (books: Book[]): BookSummaryWithCopies[] => {
     return books.map((book) => BookSummaryMapper.toSummaryWithCopies(book));
   },
