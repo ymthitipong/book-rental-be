@@ -1,4 +1,7 @@
-import { BookSummary, BookSummaryMapper } from "@application/summary/book.summary";
+import {
+  BookSummary,
+  BookSummaryMapper,
+} from "@application/summary/book.summary";
 import type { ILogger } from "@domain/logger.interface";
 import type { IBookRepository } from "@domain/repositories/book.repository.interface";
 import { RepositoryOrderSelectionType } from "@domain/repositories/repository.interface";
@@ -6,8 +9,8 @@ import { AuthorName } from "@domain/value-object/author-name";
 import { BookTitle } from "@domain/value-object/book-title";
 
 interface ISearchBooksData {
-  title?: string;
   authorName?: string;
+  title?: string;
 }
 
 interface ISearchBooksOptions {
@@ -31,26 +34,33 @@ export class SearchBooksUsecase {
     this.logger.info(this.loggerContext, "start");
 
     const findAllProps = {
+      authorName: data.authorName
+        ? AuthorName.create(data.authorName)
+        : undefined,
       title: data.title ? BookTitle.create(data.title) : undefined,
-      authorName: data.authorName ? AuthorName.create(data.authorName) : undefined,
     };
     const findAllOptions = {
       limit: options.limit,
       order: toBookRepositoryOrder(options.order),
-    }
-    
-    const books = await this.bookRepository.findAll(findAllProps, findAllOptions);
-    
+    };
+
+    const books = await this.bookRepository.findAll(
+      findAllProps,
+      findAllOptions,
+    );
+
     this.logger.info(this.loggerContext, "end");
-    return BookSummaryMapper.toListSummary(books);
+    return BookSummaryMapper.toSummaryList(books);
   }
 }
 
-const toBookRepositoryOrder = (usecaseOrder: string): { ['title']: RepositoryOrderSelectionType } => {
+const toBookRepositoryOrder = (
+  usecaseOrder: string,
+): { ["title"]: RepositoryOrderSelectionType } => {
   switch (usecaseOrder) {
-    case 'title_desc':
-      return { title: 'desc' };
+    case "title_desc":
+      return { title: "desc" };
     default:
-      return { title: 'asc' };
+      return { title: "asc" };
   }
-}
+};

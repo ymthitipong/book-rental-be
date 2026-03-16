@@ -25,15 +25,15 @@ export class PublisherCode {
   static create(code: string): PublisherCode;
   static create(input: number | string): PublisherCode {
     let code: string | undefined;
-    if (typeof input === 'number') {
+    if (typeof input === "number") {
       code = this.toCode(input);
-    } 
+    }
     code = code ?? (input as string);
 
     if (!this.isValid(code)) {
-      throw new Error('Invalid publisher code format');
+      throw new Error("Invalid publisher code format");
     }
-    
+
     return new PublisherCode(code);
   }
 

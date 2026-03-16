@@ -1,17 +1,19 @@
 import { BookCategory } from "@domain/value-object/book-category";
 import { BookCode } from "@domain/value-object/book-code";
+import { BookCopyStatus } from "@domain/value-object/book-copy-status.vo";
 import { BookTitle } from "@domain/value-object/book-title";
 import { Author } from "./author.entity";
 import { BookCopy } from "./book-copy.entity";
 import { Publisher } from "./publisher.entity";
 
 interface BookProps {
-  availableCopyCount: number;
   authors: Author[];
+  availableCopyCount: number;
   category: BookCategory;
-  code: BookCode; 
+  code: BookCode;
   copies: BookCopy[];
   description?: string | null;
+  lastCopyNo?: number | null;
   persistenceId?: number | null;
   publicationDate?: string | null;
   publisher?: Publisher | null;
@@ -24,8 +26,9 @@ export class Book {
   private readonly _authors: Author[];
   private readonly _category: BookCategory;
   private readonly _code: BookCode;
-  private readonly _copies: BookCopy[];
+  private _copies: BookCopy[];
   private readonly _description: string | null;
+  private _lastCopyNo: number | null;
   private readonly _publicationDate: string | null;
   private readonly _publisher: Publisher | null;
   private readonly _title: BookTitle;
@@ -39,12 +42,13 @@ export class Book {
     this._code = props.code;
     this._copies = props.copies || [];
     this._description = props.description || null;
+    this._lastCopyNo = props.lastCopyNo || null;
     this._persistenceId = props.persistenceId || null;
     this._publicationDate = props.publicationDate || null;
     this._publisher = props.publisher || null;
     this._title = props.title;
     this._totalCopyCount = props.totalCopyCount;
-    }
+  }
 
   static create(props: BookProps): Book {
     return new Book(props);
@@ -94,8 +98,16 @@ export class Book {
     return this._totalCopyCount;
   }
 
+  get lastCopyNo(): number | null {
+    return this._lastCopyNo;
+  }
+
   updateAvailableCopyCount(availableCopyCount: number) {
     this._availableCopyCount = availableCopyCount;
+  }
+
+  updateLastCopyNo(lastCopyNo: number | null) {
+    this._lastCopyNo = lastCopyNo;
   }
 
   updatePersistenceId(persistenceId: number) {
@@ -104,5 +116,27 @@ export class Book {
 
   updateTotalCopyCount(totalCopyCount: number) {
     this._totalCopyCount = totalCopyCount;
+  }
+
+  createNewCopies(count: number): {
+    newCopies: BookCopy[];
+    newLastCopyNo: number;
+    count: number;
+  } {
+    const fromNo = (this._lastCopyNo ?? -1) + 1;
+
+    const newCopies = Array.from({ length: count }, (_, i) => {
+      return BookCopy.create({
+        bookCode: this._code,
+        no: fromNo + i,
+        status: BookCopyStatus.createAvailable(),
+      });
+    });
+
+    return {
+      count,
+      newCopies,
+      newLastCopyNo: fromNo + count - 1,
+    };
   }
 }

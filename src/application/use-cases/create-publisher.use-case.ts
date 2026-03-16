@@ -1,4 +1,7 @@
-import { PublisherSummary, PublisherSummaryMapper } from "@application/summary/publisher.summary";
+import {
+  PublisherSummary,
+  PublisherSummaryMapper,
+} from "@application/summary/publisher.summary";
 import { Publisher } from "@domain/entities/publisher.entity";
 import type { IException } from "@domain/exception.interface";
 import type { ILogger } from "@domain/logger.interface";
@@ -23,10 +26,11 @@ export class CreatePublisherUseCase {
 
     const counter = await this.counterRepository.getPublisherCounterNumber();
     if (counter === null) {
-      this.logger.error(this.loggerContext, "Failed to get publisher counter number");
-      throw this.exception.internalServerErrorException({
-        message: "Failed to get publisher counter number",
-      });
+      this.logger.error(
+        this.loggerContext,
+        "Failed to get publisher counter number",
+      );
+      throw this.exception.internalServerErrorException({message: "Failed to get publisher counter number",});
     }
 
     const publisher = Publisher.create({
@@ -37,12 +41,10 @@ export class CreatePublisherUseCase {
     try {
       await this.publisherRepository.save(publisher);
     } catch (error: unknown) {
-      console.log('error code', (error as any).code);
-      console.log('error message', (error as any).message);
+      console.log("error code", (error as any).code);
+      console.log("error message", (error as any).message);
       this.logger.error(this.loggerContext, "Failed to save to db");
-      throw this.exception.internalServerErrorException({
-        message: "Failed to save to db",
-      });
+      throw this.exception.internalServerErrorException({message: "Failed to save to db",});
     }
 
     await this.counterRepository.updatePublisherCounterNumber(counter + 1);

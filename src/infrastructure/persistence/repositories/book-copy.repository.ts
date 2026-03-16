@@ -6,7 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { BookCopyMapper } from "../mapper/book-copy.mapper";
 
-@Injectable() 
+@Injectable()
 export class BookCopyRepository implements IBookCopyRepository {
   constructor(
     @InjectRepository(BookCopyTypeormEntity)
@@ -19,32 +19,30 @@ export class BookCopyRepository implements IBookCopyRepository {
       relations: {
         book: boolean;
       };
-    }
+    },
   ): Promise<BookCopy | null> {
     const persistenceData = await this.bookCopyTypeormRepository.findOne({
-      where: { id },
       relations: options?.relations || undefined,
+      where: { id },
     });
-    
+
     if (!persistenceData) {
       return null;
     }
-    
+
     return BookCopyMapper.toDomain(persistenceData);
   }
-  
-  async saveAll(bookCopies: BookCopy[]): Promise<BookCopy[]> {
+
+  async saveAllWithBookId(
+    bookCopies: BookCopy[],
+    bookId: number,
+  ): Promise<void> {
     const savedPersistenceData = await this.bookCopyTypeormRepository.save(
       bookCopies.map((copy) => ({
+        book: { id: bookId },
         no: copy.number,
         status: copy.status.value,
-        book: {
-          code: copy.bookCode.value,
-        }
-      }))
+      })),
     );
-    
-    return savedPersistenceData.map((copy) => BookCopyMapper.toDomain(copy));
   }
-
 }

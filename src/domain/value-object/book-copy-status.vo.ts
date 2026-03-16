@@ -1,4 +1,7 @@
-import { bookCopyStatusDesciption, BookCopyStatusEnum } from "@domain/constant/book-copy-status.constant";
+import {
+  bookCopyStatusDesciption,
+  BookCopyStatusEnum,
+} from "@domain/constant/book-copy-status.constant";
 
 export class BookCopyStatus {
   private constructor(private readonly _value: BookCopyStatusEnum) {}
@@ -29,7 +32,7 @@ export class BookCopyStatus {
 
   static borrow(current: BookCopyStatus) {
     if (current.value !== BookCopyStatusEnum.AVAILABLE) {
-      throw new Error('Book copy is not available');
+      throw new Error("Book copy is not available");
     }
 
     return this.createBorrowed();
@@ -37,7 +40,7 @@ export class BookCopyStatus {
 
   static return(current: BookCopyStatus): BookCopyStatus {
     if (current.value !== BookCopyStatusEnum.BORROWED) {
-      throw new Error('Book copy is not borrowed');
+      throw new Error("Book copy is not borrowed");
     }
 
     return this.createAvailable();
@@ -45,7 +48,7 @@ export class BookCopyStatus {
 
   static repair(current: BookCopyStatus) {
     if (current.value !== BookCopyStatusEnum.AVAILABLE) {
-      throw new Error('Book copy is not available');
+      throw new Error("Book copy is not available");
     }
 
     return this.createUnavailable();
@@ -53,9 +56,9 @@ export class BookCopyStatus {
 
   static restore(current: BookCopyStatus) {
     if (current.value !== BookCopyStatusEnum.UNAVAILABLE) {
-      throw new Error('Book copy is not unavailable');
+      throw new Error("Book copy is not unavailable");
     }
 
     return this.createAvailable();
   }
-};
+}

@@ -1,10 +1,16 @@
-import { BookSummary, BookSummaryWithCopies } from '@application/summary/book.summary';
-import { IAuthorResponse, toAuthorResponse } from './author.response.dto';
-import { ICopyResponse, toCopyResponse } from './copy.response.dto';
-import { IPublisherResponse, toPublisherResponse } from './publisher.response.dto';
+/* eslint-disable perfectionist/sort-interfaces */
+/* eslint-disable sort-keys */
+import { BookCopySummary } from "@application/summary/book-copy.summary";
+import { BookSummary } from "@application/summary/book.summary";
+import { IAuthorResponse, toAuthorResponse } from "./author.response.dto";
+import { ICopyResponse, toCopyResponse } from "./copy.response.dto";
+import {
+  IPublisherResponse,
+  toPublisherResponse,
+} from "./publisher.response.dto";
 
 export interface IBookResponse {
-  object: 'book';
+  object: "book";
   availableCopyCount: number;
   authors: IAuthorResponse[];
   category: {
@@ -22,7 +28,7 @@ export interface IBookResponse {
 
 export const toBookResponse = (book: BookSummary): IBookResponse => {
   return {
-    object: 'book',
+    object: "book",
     availableCopyCount: book.availableCopyCount,
     authors: book.authors.map((author) => toAuthorResponse(author)),
     category: {
@@ -32,17 +38,18 @@ export const toBookResponse = (book: BookSummary): IBookResponse => {
     code: book.code,
     description: book.description,
     publicationDate: book.publicationDate,
-    publisher: book.publisher
-      ? toPublisherResponse(book.publisher)
-      : null,
+    publisher: book.publisher ? toPublisherResponse(book.publisher) : null,
     title: book.title,
     totalCopyCount: book.totalCopyCount,
   };
-}
+};
 
-export const toBookResponseWithCopies = (book: BookSummaryWithCopies): IBookResponse => {
+export const toBookResponseWithCopies = (
+  book: BookSummary,
+  copies: BookCopySummary[],
+): IBookResponse => {
   return {
     ...toBookResponse(book),
-    copies: book.copies.map((copy) => toCopyResponse(copy)),
+    copies: copies.map((copy) => toCopyResponse(copy)),
   };
-}
+};

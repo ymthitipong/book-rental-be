@@ -1,7 +1,5 @@
 import { Module } from "@nestjs/common";
-import {
-  TypeOrmModule, TypeOrmModuleOptions
-} from "@nestjs/typeorm";
+import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { EnvironmentConfigModule } from "../environment-config/environment-config.module";
 import { EnvironmentConfigService } from "../environment-config/environment-config.service";
 
@@ -9,15 +7,15 @@ export const getTypeOrmModuleOptions = (
   config: EnvironmentConfigService,
 ): TypeOrmModuleOptions =>
   ({
-    type: "postgres",
-    host: config.getDatabaseConfig().host,
-    port: config.getDatabaseConfig().port,
-    username: config.getDatabaseConfig().username,
-    password: config.getDatabaseConfig().password,
     database: config.getDatabaseConfig().name,
     entities: [__dirname + "/entities/*.entity{.ts,.js}"],
-    synchronize: config.getDatabaseConfig().synchronize,
+    host: config.getDatabaseConfig().host,
+    password: config.getDatabaseConfig().password,
+    port: config.getDatabaseConfig().port,
     schema: config.getDatabaseConfig().schema,
+    synchronize: config.getDatabaseConfig().synchronize,
+    type: "postgres",
+    username: config.getDatabaseConfig().username,
   }) as TypeOrmModuleOptions;
 
 @Module({

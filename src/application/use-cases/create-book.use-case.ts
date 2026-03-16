@@ -1,4 +1,7 @@
-import { BookSummary, BookSummaryMapper } from "@application/summary/book.summary";
+import {
+  BookSummary,
+  BookSummaryMapper,
+} from "@application/summary/book.summary";
 import { BookCategoryEnum } from "@domain/constant/book-category.constant";
 import { Book } from "@domain/entities/book.entity";
 import { IAuthorRepository } from "@domain/repositories/author.repository.interface";
@@ -29,14 +32,18 @@ export class CreateBookUseCase {
     publicationDate?: string;
     title: string;
   }): Promise<BookSummary> {
-    
-    const publisher = data.publisherCode 
-      ? await this.publisherRepository.findByCode(PublisherCode.create(data.publisherCode)) 
+    const publisher = data.publisherCode
+      ? await this.publisherRepository.findByCode(
+          PublisherCode.create(data.publisherCode),
+        )
       : null;
 
-    const authors = data.authorCodes.length > 0 
-      ? await this.authorRepository.findByCodes(data.authorCodes.map((code) => AuthorCode.create(code))) 
-      : [];
+    const authors =
+      data.authorCodes.length > 0
+        ? await this.authorRepository.findByCodes(
+            data.authorCodes.map((code) => AuthorCode.create(code)),
+          )
+        : [];
 
     const counter = await this.counterRepository.getBookCounterNumber();
     if (counter === null) {
@@ -44,16 +51,16 @@ export class CreateBookUseCase {
     }
 
     const book = Book.create({
-      availableCopyCount: 0,
       authors,
+      availableCopyCount: 0,
       category: BookCategory.create(data.category),
       code: BookCode.create(counter),
+      copies: [],
       description: data.description,
-      publisher,
       publicationDate: data.publicationDate,
+      publisher,
       title: BookTitle.create(data.title),
       totalCopyCount: 0,
-      copies: [],
     });
 
     const savedBook = await this.bookRepository.save(book);
@@ -62,4 +69,3 @@ export class CreateBookUseCase {
     return BookSummaryMapper.toSummary(savedBook);
   }
 }
-

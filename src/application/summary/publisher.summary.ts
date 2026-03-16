@@ -12,7 +12,9 @@ export const PublisherSummaryMapper = {
       name: publisher.name.value,
     };
   },
-  toListSummary: (publishers: Publisher[]): PublisherSummary[] => {
-    return publishers.map((publisher) => PublisherSummaryMapper.toSummary(publisher));
+  toSummaryList: (publishers: Publisher[]): PublisherSummary[] => {
+    return publishers.map((publisher) =>
+      PublisherSummaryMapper.toSummary(publisher),
+    );
   },
 };

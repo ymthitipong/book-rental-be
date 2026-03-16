@@ -1,4 +1,7 @@
-import { PublisherSummary, PublisherSummaryMapper } from "@application/summary/publisher.summary";
+import {
+  PublisherSummary,
+  PublisherSummaryMapper,
+} from "@application/summary/publisher.summary";
 import type { ILogger } from "@domain/logger.interface";
 import type { IPublisherRepository } from "@domain/repositories/publisher.repository.interface";
 import { RepositoryOrderSelectionType } from "@domain/repositories/repository.interface";
@@ -21,29 +24,35 @@ export class SearchPublishersUseCase {
     private readonly logger: ILogger,
   ) {}
 
-  async execute(data: ISearchPublishersData, options: ISearchPublishersOptions): Promise<PublisherSummary[]> {
+  async execute(
+    data: ISearchPublishersData,
+    options: ISearchPublishersOptions,
+  ): Promise<PublisherSummary[]> {
     this.logger.info(this.loggerContext, "start");
-    
-    const findAllProps = {
-      name: data.name ? PublisherName.create(data.name) : undefined,
-    };
+
+    const findAllProps = {name: data.name ? PublisherName.create(data.name) : undefined,};
     const findAllOptions = {
       limit: options.limit,
       order: toPublisherRepositoryOrder(options.order),
     };
 
-    const publishers = await this.publisherRepository.findAll(findAllProps, findAllOptions);
-    
+    const publishers = await this.publisherRepository.findAll(
+      findAllProps,
+      findAllOptions,
+    );
+
     this.logger.info(this.loggerContext, "end");
-    return PublisherSummaryMapper.toListSummary(publishers);
+    return PublisherSummaryMapper.toSummaryList(publishers);
   }
 }
 
-const toPublisherRepositoryOrder = (usecaseOrder: string): { ['name']: RepositoryOrderSelectionType } => {
+const toPublisherRepositoryOrder = (
+  usecaseOrder: string,
+): { ["name"]: RepositoryOrderSelectionType } => {
   switch (usecaseOrder) {
-    case 'name_desc':
-      return { name: 'desc' };
+    case "name_desc":
+      return { name: "desc" };
     default:
-      return { name: 'asc' };
+      return { name: "asc" };
   }
-}
+};

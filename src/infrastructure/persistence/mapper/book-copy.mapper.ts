@@ -10,7 +10,9 @@ export class BookCopyMapper {
     return BookCopy.create({
       bookCode: BookCode.create(typeorm.book.code),
       no: typeorm.no,
-      status: BookCopyStatus.create(parseEnum(BookCopyStatusEnum, typeorm.status)),
+      status: BookCopyStatus.create(
+        parseEnum(BookCopyStatusEnum, typeorm.status),
+      ),
     });
   }
 }

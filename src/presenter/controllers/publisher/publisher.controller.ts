@@ -1,13 +1,18 @@
-import { PublisherSummary } from '@application/summary/publisher.summary';
-import { CreatePublisherUseCase } from '@application/use-cases/create-publisher.use-case';
-import { SearchPublisherByCodeUseCase } from '@application/use-cases/search-publisher-by-code.use-case';
-import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
-import { IPublisherResponse, toPublisherResponse } from '@presenter/responses/publisher.response.dto';
-import { CreatePublisherRequestBodyDto } from './create-publisher.request.dto';
-import { SearchAuthorByCodeRequestParamDto } from './search-publisher-by-code.request.dto';
+import { PublisherSummary } from "@application/summary/publisher.summary";
+import { CreatePublisherUseCase } from "@application/use-cases/create-publisher.use-case";
+import { SearchPublisherByCodeUseCase } from "@application/use-cases/search-publisher-by-code.use-case";
+import { UsecaseProxyModule } from "@infrastructure/usecase-proxy/usecase-proxy.module";
+import {
+ Body, Controller, Get, Inject, Param, Post 
+} from "@nestjs/common";
+import {
+  IPublisherResponse,
+  toPublisherResponse,
+} from "@presenter/responses/publisher.response.dto";
+import { CreatePublisherRequestBodyDto } from "./create-publisher.request.dto";
+import { SearchAuthorByCodeRequestParamDto } from "./search-publisher-by-code.request.dto";
 
-@Controller('publisher')
+@Controller("publisher")
 export class PublisherController {
   constructor(
     @Inject(UsecaseProxyModule.CREATE_PUBLISHER)
@@ -21,15 +26,21 @@ export class PublisherController {
   }
 
   @Post()
-  async create(@Body() body: CreatePublisherRequestBodyDto): Promise<IPublisherResponse> {
+  async create(
+    @Body() body: CreatePublisherRequestBodyDto,
+  ): Promise<IPublisherResponse> {
     const publisher = await this.createPublisherUseCase.execute(body.name);
 
     return this.toResponse(publisher);
   }
 
-  @Get(':code')
-  async searchByCode(@Param() params: SearchAuthorByCodeRequestParamDto): Promise<IPublisherResponse> {
-    const publisher = await this.searchPublisherByCodeUseCase.execute(params.code);
+  @Get(":code")
+  async searchByCode(
+    @Param() params: SearchAuthorByCodeRequestParamDto,
+  ): Promise<IPublisherResponse> {
+    const publisher = await this.searchPublisherByCodeUseCase.execute(
+      params.code,
+    );
 
     return this.toResponse(publisher);
   }

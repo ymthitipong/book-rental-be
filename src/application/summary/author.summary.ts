@@ -14,9 +14,7 @@ export const AuthorSummaryMapper = {
       yearOfBirth: author.yearOfBirth,
     };
   },
-  toListSummary: (authors: Author[]): AuthorSummary[] => {
+  toSummaryList: (authors: Author[]): AuthorSummary[] => {
     return authors.map((author) => AuthorSummaryMapper.toSummary(author));
   },
 };
-
-

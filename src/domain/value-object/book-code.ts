@@ -25,15 +25,15 @@ export class BookCode {
   static create(code: string): BookCode;
   static create(input: number | string): BookCode {
     let code: string | undefined;
-    if (typeof input === 'number') {
+    if (typeof input === "number") {
       code = this.toCode(input);
-    } 
+    }
     code = code ?? (input as string);
 
     if (!this.isValid(code)) {
-      throw new Error('Invalid book code format');
+      throw new Error("Invalid book code format");
     }
-    
+
     return new BookCode(code);
   }
 

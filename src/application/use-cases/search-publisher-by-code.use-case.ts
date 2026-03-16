@@ -1,4 +1,7 @@
-import { PublisherSummary, PublisherSummaryMapper } from "@application/summary/publisher.summary";
+import {
+  PublisherSummary,
+  PublisherSummaryMapper,
+} from "@application/summary/publisher.summary";
 import type { IException } from "@domain/exception.interface";
 import type { ILogger } from "@domain/logger.interface";
 import type { IPublisherRepository } from "@domain/repositories/publisher.repository.interface";
@@ -16,14 +19,14 @@ export class SearchPublisherByCodeUseCase {
 
   async execute(code: string): Promise<PublisherSummary> {
     this.logger.info(this.loggerContext, "start");
-    
-    const publisher = await this.publisherRepository.findByCode(PublisherCode.create(code));
+
+    const publisher = await this.publisherRepository.findByCode(
+      PublisherCode.create(code),
+    );
     if (publisher === null) {
-      throw this.exception.notFoundException({
-        message: "publisher not found",
-      });
+      throw this.exception.notFoundException({message: "publisher not found",});
     }
-    
+
     this.logger.info(this.loggerContext, "end");
     return PublisherSummaryMapper.toSummary(publisher);
   }

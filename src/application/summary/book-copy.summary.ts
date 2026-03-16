@@ -22,13 +22,16 @@ export const BookCopySummaryMapper = {
       code: bookCopy.code,
       no: bookCopy.number,
       status: {
-        value: bookCopy.status.value,
         description: bookCopy.status.description,
+        value: bookCopy.status.value,
       },
     };
   },
-  toSummaryWithBook: (bookCopy: BookCopy, book: Book): BookCopySummaryWithBook => {
-    return { 
+  toSummaryWithBook: (
+    bookCopy: BookCopy,
+    book: Book,
+  ): BookCopySummaryWithBook => {
+    return {
       ...BookCopySummaryMapper.toSummary(bookCopy),
       book: BookSummaryMapper.toSummary(book),
     };

@@ -16,9 +16,7 @@ export class CounterRepository implements ICounterRepository {
   ) {}
 
   async getPublisherCounterNumber(): Promise<number | null> {
-    const counterPersistenceData = await this.counterTypeormRepository.findOne({
-      where: { name: this.publisherCounterName },
-    });
+    const counterPersistenceData = await this.counterTypeormRepository.findOne({where: { name: this.publisherCounterName },});
 
     return counterPersistenceData?.counterNumber ?? null;
   }
@@ -31,9 +29,7 @@ export class CounterRepository implements ICounterRepository {
   }
 
   async getAuthorCounterNumber(): Promise<number | null> {
-    const counterPersistenceData = await this.counterTypeormRepository.findOne({
-      where: { name: this.authorCounterName },
-    });
+    const counterPersistenceData = await this.counterTypeormRepository.findOne({where: { name: this.authorCounterName },});
 
     return counterPersistenceData?.counterNumber ?? null;
   }
@@ -46,9 +42,7 @@ export class CounterRepository implements ICounterRepository {
   }
 
   async getBookCounterNumber(): Promise<number | null> {
-    const counterPersistenceData = await this.counterTypeormRepository.findOne({
-      where: { name: this.bookCounterName },
-    });
+    const counterPersistenceData = await this.counterTypeormRepository.findOne({where: { name: this.bookCounterName },});
 
     return counterPersistenceData?.counterNumber ?? null;
   }

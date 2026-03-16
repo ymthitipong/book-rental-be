@@ -1,14 +1,18 @@
-import { PublisherSummary } from '@application/summary/publisher.summary';
+/* eslint-disable perfectionist/sort-interfaces */
+/* eslint-disable sort-keys */
+import { PublisherSummary } from "@application/summary/publisher.summary";
 
 export interface IPublisherResponse {
-  object: 'publisher';
+  object: "publisher";
   code: string;
   name: string;
 }
 
-export const toPublisherResponse = (publisher: PublisherSummary): IPublisherResponse => {
+export const toPublisherResponse = (
+  publisher: PublisherSummary,
+): IPublisherResponse => {
   return {
-    object: 'publisher',
+    object: "publisher",
     code: publisher.code,
     name: publisher.name,
   };

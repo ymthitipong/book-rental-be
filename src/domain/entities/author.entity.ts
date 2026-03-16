@@ -4,8 +4,8 @@ import { AuthorName } from "@domain/value-object/author-name";
 interface AuthorProps {
   code: AuthorCode;
   name: AuthorName;
-  yearOfBirth: number;
   persistenceId?: number;
+  yearOfBirth: number;
 }
 
 export class Author {

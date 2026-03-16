@@ -1,5 +1,7 @@
-import { Transform } from 'class-transformer';
-import { IsIn, IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { Transform } from "class-transformer";
+import {
+ IsIn, IsInt, IsOptional, IsString, Min 
+} from "class-validator";
 
 export class SearchPublishersByPartialNameRequestQueryDto {
   @IsString()
@@ -14,9 +16,9 @@ export class SearchPublishersByPartialNameRequestQueryDto {
   @IsInt()
   @Min(1)
   limit!: number | undefined;
-  
+
   @IsOptional()
   @IsString()
-  @IsIn(['name_asc', 'name_desc'])
-  order!: 'name_asc' | 'name_desc' | undefined;
+  @IsIn(["name_asc", "name_desc"])
+  order!: "name_asc" | "name_desc" | undefined;
 }

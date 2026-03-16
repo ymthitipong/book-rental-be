@@ -25,15 +25,15 @@ export class AuthorCode {
   static create(code: string): AuthorCode;
   static create(input: number | string): AuthorCode {
     let code: string | undefined;
-    if (typeof input === 'number') {
+    if (typeof input === "number") {
       code = this.toCode(input);
-    } 
+    }
     code = code ?? (input as string);
 
     if (!this.isValid(code)) {
-      throw new Error('Invalid author code format');
+      throw new Error("Invalid author code format");
     }
-    
+
     return new AuthorCode(code);
   }
 

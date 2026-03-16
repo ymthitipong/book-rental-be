@@ -1,15 +1,15 @@
 export enum BookCategoryEnum {
-  COMPUTER_SCIENCE = '000',
-  PHILOSOPHY = '100',
-  RELIGION = '200',
-  SOCIAL_SCIENCES = '300',
-  LANGUAGE = '400',
-  SCIENCE = '500',
-  TECHNOLOGY = '600',
-  ARTS = '700',
-  LITERATURE = '800',
-  HISTORY = '900',
-  OTHER = '999',
+  COMPUTER_SCIENCE = "000",
+  PHILOSOPHY = "100",
+  RELIGION = "200",
+  SOCIAL_SCIENCES = "300",
+  LANGUAGE = "400",
+  SCIENCE = "500",
+  TECHNOLOGY = "600",
+  ARTS = "700",
+  LITERATURE = "800",
+  HISTORY = "900",
+  OTHER = "999",
 }
 
 /* 
@@ -27,19 +27,20 @@ Main Category
 */
 
 const categoryDescription: Record<BookCategoryEnum, string> = {
-    [BookCategoryEnum.COMPUTER_SCIENCE]: 'Computer Science, Information & General Works',
-    [BookCategoryEnum.PHILOSOPHY]: 'Philosophy & Psychology',
-    [BookCategoryEnum.RELIGION]: 'Religion',
-    [BookCategoryEnum.SOCIAL_SCIENCES]: 'Social Sciences',
-    [BookCategoryEnum.LANGUAGE]: 'Language',
-    [BookCategoryEnum.SCIENCE]: 'Pure Science',
-    [BookCategoryEnum.TECHNOLOGY]: 'Technology',
-    [BookCategoryEnum.ARTS]: 'Arts & Recreation',
-    [BookCategoryEnum.LITERATURE]: 'Literature',
-    [BookCategoryEnum.HISTORY]: 'History & Geography',
-    [BookCategoryEnum.OTHER]: 'Other'
-  };
+  [BookCategoryEnum.COMPUTER_SCIENCE]:
+    "Computer Science, Information & General Works",
+  [BookCategoryEnum.PHILOSOPHY]: "Philosophy & Psychology",
+  [BookCategoryEnum.RELIGION]: "Religion",
+  [BookCategoryEnum.SOCIAL_SCIENCES]: "Social Sciences",
+  [BookCategoryEnum.LANGUAGE]: "Language",
+  [BookCategoryEnum.SCIENCE]: "Pure Science",
+  [BookCategoryEnum.TECHNOLOGY]: "Technology",
+  [BookCategoryEnum.ARTS]: "Arts & Recreation",
+  [BookCategoryEnum.LITERATURE]: "Literature",
+  [BookCategoryEnum.HISTORY]: "History & Geography",
+  [BookCategoryEnum.OTHER]: "Other",
+};
 
-export const getBookCategoryDescription = 
-  (category: BookCategoryEnum): string =>
-    categoryDescription[category] || 'Unknown'
+export const getBookCategoryDescription = (
+  category: BookCategoryEnum,
+): string => categoryDescription[category] || "Unknown";

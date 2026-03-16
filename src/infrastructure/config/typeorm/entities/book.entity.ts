@@ -5,7 +5,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToMany
+  OneToMany,
 } from "typeorm";
 import { AuthorTypeormEntity } from "./author.entity";
 import { BaseEntity } from "./base";
@@ -14,42 +14,40 @@ import { PublisherTypeormEntity } from "./publisher.entity";
 
 @Entity("book")
 export class BookTypeormEntity extends BaseEntity {
-  @Column("text", {
-    name: "available_copy_count",
-  })
+  @Column("text", { name: "available_copy_count" })
   availableCopyCount!: number;
 
   @ManyToMany(() => AuthorTypeormEntity)
   @JoinTable({
-    name: "author_book_mapping",
-    joinColumn: {
-      name: "book_id",
-      referencedColumnName: "id",
-    },
     inverseJoinColumn: {
       name: "author_id",
       referencedColumnName: "id",
     },
+    joinColumn: {
+      name: "book_id",
+      referencedColumnName: "id",
+    },
+    name: "author_book_mapping",
   })
   authors!: AuthorTypeormEntity[];
 
-  @Column("char", {
-    length: "3",
-  })
+  @Column("char", { length: "3" })
   category!: string;
 
-  @Column("char", {
-    length: "8",
-  })
+  @Column("char", { length: "8" })
   code!: string;
 
   @OneToMany(() => BookCopyTypeormEntity, (copy) => copy.book)
   copies!: BookCopyTypeormEntity[];
 
-  @Column("text", {
+  @Column("text", { nullable: true })
+  description!: string | null;
+
+  @Column("integer", {
+    name: "last_copy_no",
     nullable: true,
   })
-  description!: string | null;
+  lastCopyNo!: number | null;
 
   @Column("date", {
     name: "publication_date",
@@ -64,8 +62,6 @@ export class BookTypeormEntity extends BaseEntity {
   @Column("text")
   title!: string;
 
-  @Column("text", {
-    name: "total_copy_count",
-  })
+  @Column("text", { name: "total_copy_count" })
   totalCopyCount!: number;
-} 
+}

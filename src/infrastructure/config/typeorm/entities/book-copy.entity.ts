@@ -1,8 +1,5 @@
 import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne
+ Column, Entity, JoinColumn, ManyToOne 
 } from "typeorm";
 import { BaseEntity } from "./base";
 import { BookTypeormEntity } from "./book.entity";
@@ -18,4 +15,4 @@ export class BookCopyTypeormEntity extends BaseEntity {
   @ManyToOne(() => BookTypeormEntity, (book) => book.copies)
   @JoinColumn({ name: "book_id" })
   book!: BookTypeormEntity;
-} 
+}

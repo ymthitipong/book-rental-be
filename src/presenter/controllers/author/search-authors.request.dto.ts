@@ -1,5 +1,7 @@
-import { Transform } from 'class-transformer';
-import { IsIn, IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { Transform } from "class-transformer";
+import {
+ IsIn, IsInt, IsOptional, IsString, Min 
+} from "class-validator";
 
 export class SearchAuthorsQueryDto {
   @IsString()
@@ -17,6 +19,6 @@ export class SearchAuthorsQueryDto {
 
   @IsOptional()
   @IsString()
-  @IsIn(['name_asc', 'name_desc'])
-  order!: 'name_asc' | 'name_desc' | undefined;  
+  @IsIn(["name_asc", "name_desc"])
+  order!: "name_asc" | "name_desc" | undefined;
 }

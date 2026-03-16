@@ -1,23 +1,20 @@
 // @ts-check
-import eslint from '@eslint/js';
 import perfectionist from "eslint-plugin-perfectionist";
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: ['eslint.config.mjs', 'dist', 'node_modules', 'db'],
   },
-  eslint.configs.recommended,
-  eslintPluginPrettierRecommended,
   {
     languageOptions: {
+      parser: tseslint.parser,
       globals: {
         ...globals.node,
         ...globals.jest,
       },
-      sourceType: 'commonjs',
+      sourceType: 'module',
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
@@ -25,17 +22,15 @@ export default tseslint.config(
     },
   },
   {
+    files: ['**/*.ts'],
+  },
+  {
     plugins: {
     perfectionist,
   },
     rules: {
-      '@typescript-eslint/no-floating-promises': 'warn',
+       "sort-keys": ["error", "asc", { "caseSensitive": true }],
       '@typescript-eslint/no-unsafe-argument': 'off',
-      "prettier/prettier": ["error", {
-        endOfLine: "auto",
-        semi: true,
-        trailingComma: 'all'
-      }],
       "perfectionist/sort-interfaces": [
         "error",
         {
