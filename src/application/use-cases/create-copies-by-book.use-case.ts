@@ -45,7 +45,21 @@ export class CreateCopiesByBookUseCase {
       newCopies,
       book.persistenceId!,
     );
-    await this.bookRepository.updateById(book.persistenceId!, {lastCopyNo: newLastCopyNo,});
+
+    const newAvailableCopyCount = book.availableCopyCount + copyCount;
+    const newTotalCopyCount = book.totalCopyCount + copyCount;
+    
+    await this.bookRepository.updateById(book.persistenceId!, {
+      availableCopyCount: newAvailableCopyCount,
+      lastCopyNo: newLastCopyNo,
+      totalCopyCount: newTotalCopyCount,
+    });
+
+    book.update({
+      availableCopyCount: newAvailableCopyCount,
+      lastCopyNo: newLastCopyNo,
+      totalCopyCount: newTotalCopyCount,
+    });
 
     return {
       book: BookSummaryMapper.toSummary(book),

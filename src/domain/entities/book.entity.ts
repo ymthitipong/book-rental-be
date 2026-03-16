@@ -42,8 +42,8 @@ export class Book {
     this._code = props.code;
     this._copies = props.copies || [];
     this._description = props.description || null;
-    this._lastCopyNo = props.lastCopyNo || null;
-    this._persistenceId = props.persistenceId || null;
+    this._lastCopyNo = props.lastCopyNo ?? null;
+    this._persistenceId = props.persistenceId ?? null;
     this._publicationDate = props.publicationDate || null;
     this._publisher = props.publisher || null;
     this._title = props.title;
@@ -102,20 +102,15 @@ export class Book {
     return this._lastCopyNo;
   }
 
-  updateAvailableCopyCount(availableCopyCount: number) {
-    this._availableCopyCount = availableCopyCount;
-  }
-
-  updateLastCopyNo(lastCopyNo: number | null) {
-    this._lastCopyNo = lastCopyNo;
-  }
-
-  updatePersistenceId(persistenceId: number) {
-    this._persistenceId = persistenceId;
-  }
-
-  updateTotalCopyCount(totalCopyCount: number) {
-    this._totalCopyCount = totalCopyCount;
+  update(props: {
+    availableCopyCount?: number;
+    lastCopyNo?: number;
+    totalCopyCount?: number;
+  }): void {
+    this._availableCopyCount =
+      props.availableCopyCount ?? this._availableCopyCount;
+    this._lastCopyNo = props.lastCopyNo ?? this._lastCopyNo;
+    this._totalCopyCount = props.totalCopyCount ?? this._totalCopyCount;
   }
 
   createNewCopies(count: number): {
@@ -123,6 +118,7 @@ export class Book {
     newLastCopyNo: number;
     count: number;
   } {
+    console.log("lastCopyNo", this._lastCopyNo);
     const fromNo = (this._lastCopyNo ?? -1) + 1;
 
     const newCopies = Array.from({ length: count }, (_, i) => {

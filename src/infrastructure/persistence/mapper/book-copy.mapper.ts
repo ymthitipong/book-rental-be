@@ -10,6 +10,7 @@ export class BookCopyMapper {
     return BookCopy.create({
       bookCode: BookCode.create(typeorm.book.code),
       no: typeorm.no,
+      persistenceId: typeorm.id,
       status: BookCopyStatus.create(
         parseEnum(BookCopyStatusEnum, typeorm.status),
       ),

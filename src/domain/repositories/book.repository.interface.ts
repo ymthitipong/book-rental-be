@@ -14,6 +14,8 @@ export type OrderOptions = {
 
 export type UpdateData = {
   lastCopyNo?: number;
+  totalCopyCount?: number;
+  availableCopyCount?: number;
 };
 
 export interface IBookRepository {

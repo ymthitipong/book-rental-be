@@ -18,7 +18,7 @@ export class BookCopy {
     this._bookCode = props.bookCode;
     this._no = props.no;
     this._status = props.status;
-    this._persistenceId = props.persistenceId || null;
+    this._persistenceId = props.persistenceId ?? null;
   }
 
   static create(props: BookCopyProps): BookCopy {

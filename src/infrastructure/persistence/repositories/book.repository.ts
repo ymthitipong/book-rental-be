@@ -138,7 +138,11 @@ export class BookRepository implements IBookRepository {
   }
 
   async updateById(id: number, updateData: UpdateData): Promise<void> {
-    const updatedPersistenceData = await this.bookTypeormRepository.update(id, {lastCopyNo: updateData.lastCopyNo,});
+    const updatedPersistenceData = await this.bookTypeormRepository.update(id, {
+      availableCopyCount: updateData.availableCopyCount,
+      lastCopyNo: updateData.lastCopyNo,
+      totalCopyCount: updateData.totalCopyCount,
+    });
 
     if (!updatedPersistenceData) {
       throw new Error("Failed to update book");
