@@ -37,12 +37,14 @@ export class BookCopyRepository implements IBookCopyRepository {
     bookCopies: BookCopy[],
     bookId: number,
   ): Promise<void> {
-    const savedPersistenceData = await this.bookCopyTypeormRepository.save(
+    await this.bookCopyTypeormRepository.save(
       bookCopies.map((copy) => ({
         book: { id: bookId },
         no: copy.number,
         status: copy.status.value,
       })),
     );
+
+    return;
   }
 }

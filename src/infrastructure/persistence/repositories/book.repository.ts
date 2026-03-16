@@ -97,13 +97,8 @@ export class BookRepository implements IBookRepository {
     return BookMapper.toDomain(bookPersistenceData);
   }
 
-  async save(
-    book: Book,
-    options?: {
-      relations?: RelationOptions;
-    },
-  ): Promise<Book> {
-    const { id } = await this.bookTypeormRepository.save({
+  async save(book: Book): Promise<void> {
+    await this.bookTypeormRepository.save({
       authors: book.authors
       .filter(
         (author): author is typeof author & { persistenceId: number } =>
@@ -119,33 +114,15 @@ export class BookRepository implements IBookRepository {
       : null,
       title: book.title.value,
     });
-
-    // Todo: need adjustment for 2 db traffic -> only 1
-    const savedPersistenceData = await this.bookTypeormRepository.findOne({
-      relations: {
-        authors: true,
-        copies: options?.relations?.copies || false,
-        publisher: true,
-      },
-      where: { id },
-    });
-
-    if (!savedPersistenceData) {
-      throw new Error("Failed to create book");
-    }
-
-    return BookMapper.toDomain(savedPersistenceData);
   }
 
   async updateById(id: number, updateData: UpdateData): Promise<void> {
-    const updatedPersistenceData = await this.bookTypeormRepository.update(id, {
+    const update = await this.bookTypeormRepository.update(id, {
       availableCopyCount: updateData.availableCopyCount,
       lastCopyNo: updateData.lastCopyNo,
       totalCopyCount: updateData.totalCopyCount,
     });
 
-    if (!updatedPersistenceData) {
-      throw new Error("Failed to update book");
-    }
+    console.log('update', update)
   }
 }

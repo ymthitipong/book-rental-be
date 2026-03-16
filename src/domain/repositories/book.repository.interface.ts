@@ -47,6 +47,6 @@ export interface IBookRepository {
     options?: {
       relations?: RelationOptions;
     },
-  ): Promise<Book>;
+  ): Promise<void>;
   updateById(id: number, updateData: UpdateData): Promise<void>;
 }

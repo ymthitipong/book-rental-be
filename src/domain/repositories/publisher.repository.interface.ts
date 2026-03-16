@@ -16,5 +16,5 @@ export interface IPublisherRepository {
     },
   ): Promise<Publisher[]>;
   findByCode(code: PublisherCode): Promise<Publisher | null>;
-  save(publisher: Publisher): Promise<Publisher>;
+  save(publisher: Publisher): Promise<void>;
 }

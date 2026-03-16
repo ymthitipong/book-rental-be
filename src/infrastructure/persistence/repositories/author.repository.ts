@@ -54,12 +54,11 @@ export class AuthorRepository implements IAuthorRepository {
     return authorPersistenceData.map(AuthorMapper.toDomain);
   }
 
-  async save(author: Author): Promise<Author> {
-    const savedAuthor = await this.authorTypeormRepository.save({
+  async save(author: Author): Promise<void> {
+    await this.authorTypeormRepository.save({
       code: author.code.value,
       name: author.name.value,
       yearOfBirth: author.yearOfBirth,
     });
-    return AuthorMapper.toDomain(savedAuthor);
   }
 }

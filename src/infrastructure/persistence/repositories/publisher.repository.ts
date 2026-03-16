@@ -49,12 +49,10 @@ export class PublisherRepository implements IPublisherRepository {
     return publisherPersistenceData.map(PublisherMapper.toDomain);
   }
 
-  async save(publisher: Publisher): Promise<Publisher> {
-    const savedPersistenceData = await this.publisherTypeormRepository.save({
+  async save(publisher: Publisher): Promise<void> {
+    await this.publisherTypeormRepository.save({
       code: publisher.code.value,
       name: publisher.name.value,
     });
-
-    return PublisherMapper.toDomain(savedPersistenceData);
   }
 }

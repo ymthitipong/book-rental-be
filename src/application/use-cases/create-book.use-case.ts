@@ -63,9 +63,9 @@ export class CreateBookUseCase {
       totalCopyCount: 0,
     });
 
-    const savedBook = await this.bookRepository.save(book);
+    await this.bookRepository.save(book);
     await this.counterRepository.updateBookCounterNumber(counter + 1);
 
-    return BookSummaryMapper.toSummary(savedBook);
+    return BookSummaryMapper.toSummary(book);
   }
 }

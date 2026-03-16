@@ -17,5 +17,5 @@ export interface IAuthorRepository {
   ): Promise<Author[]>;
   findByCode(code: AuthorCode): Promise<Author | null>;
   findByCodes(codes: AuthorCode[]): Promise<Author[]>;
-  save(author: Author): Promise<Author>;
+  save(author: Author): Promise<void>;
 }
