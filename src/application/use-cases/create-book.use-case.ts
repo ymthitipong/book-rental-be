@@ -43,6 +43,7 @@ export class CreateBookUseCase {
     }
 
     const book = Book.create({
+      availableCopyCount: 0,
       authors,
       category: BookCategory.create(data.category),
       code: BookCode.create(counter),
@@ -50,6 +51,8 @@ export class CreateBookUseCase {
       publisher,
       publicationDate: data.publicationDate,
       title: BookTitle.create(data.title),
+      totalCopyCount: 0,
+      copies: [],
     });
 
     const savedBook = await this.bookRepository.save(book);

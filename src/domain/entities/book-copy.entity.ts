@@ -2,7 +2,6 @@ import { Book } from "@domain/entities/book.entity";
 import { BookCopyStatus } from "@domain/value-object/book-copy-status.vo";
 
 interface BookCopyProps {
-  acquisitionDate: string;
   book: Book;
   no: number;
   status: BookCopyStatus;
@@ -10,13 +9,11 @@ interface BookCopyProps {
 
 export class BookCopy {
   private readonly _book: Book;
-  private readonly _acquisitionDate: string;
   private readonly _no: number;
   private _status: BookCopyStatus;
 
   private constructor(props: BookCopyProps) {
     this._book = props.book;
-    this._acquisitionDate = props.acquisitionDate;
     this._no = props.no;
     this._status = props.status;
   }
@@ -25,19 +22,15 @@ export class BookCopy {
     return new BookCopy(props);
   }
 
-  get acquisitionDate(): string {
-    return this._acquisitionDate;
-  }
-
   get book(): Book {
     return this._book;
   }
 
-  get copyCode(): string {
-    return `${this.book.code}-${this._no}`;
+  get code(): string {
+    return `${this.book.code.value}-${this._no}`;
   }
 
-  get copyNumber(): number {
+  get number(): number {
     return this._no;
   }
 

@@ -3,6 +3,10 @@ import { bookCopyStatusDesciption, BookCopyStatusEnum } from "@domain/constant/b
 export class BookCopyStatus {
   private constructor(private readonly _value: BookCopyStatusEnum) {}
 
+  static create(value: BookCopyStatusEnum) {
+    return new BookCopyStatus(value);
+  }
+
   static createAvailable() {
     return new BookCopyStatus(BookCopyStatusEnum.AVAILABLE);
   }

@@ -4,7 +4,7 @@ import { PublisherCode } from '@domain/value-object/publisher-code';
 import { Expose } from 'class-transformer';
 import { IsDateString, IsEnum, IsOptional, IsString, Matches } from 'class-validator';
 
-export class CreatePublisherRequestBodyDto {
+export class CreateBookRequestBodyDto {
   @Expose({ name: 'author_codes' })
   @Matches(AuthorCode.pattern, { each: true })
   authorCodes!: string[];

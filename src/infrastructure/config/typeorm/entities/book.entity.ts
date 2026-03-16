@@ -14,28 +14,10 @@ import { PublisherTypeormEntity } from "./publisher.entity";
 
 @Entity("book")
 export class BookTypeormEntity extends BaseEntity {
-  @Column("text")
-  title!: string;
-
-  @Column("char", {
-    length: "8",
-  })
-  code!: string;
-
-  @Column("char", {
-    length: "3",
-  })
-  category!: string;
-
-  @Column("date", {
-    name: "publication_date",
-  })
-  publicationDate!: string | null;
-
   @Column("text", {
-    nullable: true,
+    name: "available_copy_count",
   })
-  description!: string | null;
+  availableCopyCount!: number;
 
   @ManyToMany(() => AuthorTypeormEntity)
   @JoinTable({
@@ -51,10 +33,39 @@ export class BookTypeormEntity extends BaseEntity {
   })
   authors!: AuthorTypeormEntity[];
 
+  @Column("char", {
+    length: "3",
+  })
+  category!: string;
+
+  @Column("char", {
+    length: "8",
+  })
+  code!: string;
+
+  @OneToMany(() => BookCopyTypeormEntity, (copy) => copy.book)
+  copies!: BookCopyTypeormEntity[];
+
+  @Column("text", {
+    nullable: true,
+  })
+  description!: string | null;
+
+  @Column("date", {
+    name: "publication_date",
+    nullable: true,
+  })
+  publicationDate!: string | null;
+
   @ManyToOne(() => PublisherTypeormEntity)
   @JoinColumn({ name: "publisher_id" })
   publisher!: PublisherTypeormEntity | null;
 
-  @OneToMany(() => BookCopyTypeormEntity, (copy) => copy.book)
-  copies!: BookCopyTypeormEntity[];
+  @Column("text")
+  title!: string;
+
+  @Column("text", {
+    name: "total_copy_count",
+  })
+  totalCopyCount!: number;
 } 

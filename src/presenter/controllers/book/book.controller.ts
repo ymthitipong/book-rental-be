@@ -4,7 +4,7 @@ import { Book } from '@domain/entities/book.entity';
 import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { IBookResponse, toBookResponse } from '@presenter/responses/book.response.dto';
-import { CreatePublisherRequestBodyDto } from './create-book.request.dto';
+import { CreateBookRequestBodyDto } from './create-book.request.dto';
 import { SearchBookByCodePararmsDto } from './search-book-by-code.request.dto';
 
 @Controller('book')
@@ -21,7 +21,7 @@ export class BookController {
   }
 
   @Post()
-  async create(@Body() createBookDto: CreatePublisherRequestBodyDto): Promise<IBookResponse> {
+  async create(@Body() createBookDto: CreateBookRequestBodyDto): Promise<IBookResponse> {
     const book = await this.createBookUseCase.execute(createBookDto);
     return this.toResponse(book);
   }
@@ -31,4 +31,13 @@ export class BookController {
     const book = await this.searchBookByCodeUseCase.execute(params.code);
     return this.toResponse(book);
   }
+
+  // @Post(':code/copies')
+  // async createCopies(
+  //   @Param() params: CreateCopiesByBookPararmsDto, 
+  //   @Body() body: CreateCopiesByBookRequestBodyDto
+  // ): Promise<IBookResponse> {
+    
+  //   return this.toResponse(book);
+  // }
 }

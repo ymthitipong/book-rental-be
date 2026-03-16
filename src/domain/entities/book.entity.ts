@@ -37,7 +37,7 @@ export class Book {
     this._authors = props.authors;
     this._category = props.category;
     this._code = props.code;
-    this._copies = props.copies;
+    this._copies = props.copies || [];
     this._description = props.description || null;
     this._persistenceId = props.persistenceId || null;
     this._publicationDate = props.publicationDate || null;
