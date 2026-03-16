@@ -1,5 +1,5 @@
+import { BookSummary } from '@application/summary/book.summary';
 import { SearchBooksUsecase } from '@application/use-cases/search-books.use-case';
-import { Book } from '@domain/entities/book.entity';
 import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
 import { Controller, Get, Inject, Query } from '@nestjs/common';
 import { IBookResponse, toBookResponse } from '@presenter/responses/book.response.dto';
@@ -14,7 +14,7 @@ export class BooksController {
   ) {}
 
   private toResponse(
-    books: Book[],
+    books: BookSummary[],
     options: {
       limit: number,
       order: 'title_asc' | 'title_desc'

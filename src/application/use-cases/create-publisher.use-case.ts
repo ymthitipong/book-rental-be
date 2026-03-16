@@ -1,3 +1,4 @@
+import { PublisherSummary, PublisherSummaryMapper } from "@application/summary/publisher.summary";
 import { Publisher } from "@domain/entities/publisher.entity";
 import type { IException } from "@domain/exception.interface";
 import type { ILogger } from "@domain/logger.interface";
@@ -17,7 +18,7 @@ export class CreatePublisherUseCase {
     private readonly logger: ILogger,
   ) {}
 
-  async execute(name: string): Promise<Publisher> {
+  async execute(name: string): Promise<PublisherSummary> {
     this.logger.info(this.loggerContext, "start");
 
     const counter = await this.counterRepository.getPublisherCounterNumber();
@@ -46,6 +47,6 @@ export class CreatePublisherUseCase {
 
     await this.counterRepository.updatePublisherCounterNumber(counter + 1);
 
-    return publisher;
+    return PublisherSummaryMapper.toSummary(publisher);
   }
 }

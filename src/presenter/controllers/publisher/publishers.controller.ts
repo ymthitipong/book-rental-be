@@ -1,5 +1,5 @@
+import { PublisherSummary } from '@application/summary/publisher.summary';
 import { SearchPublishersUseCase } from '@application/use-cases/search-publishers.use-case';
-import { Publisher } from '@domain/entities/publisher.entity';
 import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
 import { Controller, Get, Inject, Query } from '@nestjs/common';
 import { IListResponse, toListResponse } from '@presenter/responses/list.response.dto';
@@ -14,7 +14,7 @@ export class PublishersController {
   ) {}
 
   private toResponse(
-    publishers: Publisher[],
+    publishers: PublisherSummary[],
     options: {
       limit: number,
       order: 'name_asc' | 'name_desc'

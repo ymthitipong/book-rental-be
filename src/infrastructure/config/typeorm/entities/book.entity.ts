@@ -5,7 +5,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToMany,
+  OneToMany
 } from "typeorm";
 import { AuthorTypeormEntity } from "./author.entity";
 import { BaseEntity } from "./base";

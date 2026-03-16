@@ -26,6 +26,9 @@ export class BookRepository implements IBookRepository {
     order?: {
       [key in 'title']: RepositoryOrderSelectionType;
     };
+    relations?: {
+      [key in 'copies']: boolean;
+    };
   }): Promise<Book[]> {
 
     const booksPersistenceData = await this.bookTypeormRepository.find({
@@ -39,9 +42,9 @@ export class BookRepository implements IBookRepository {
         category: data.category,
       },
       relations: {
-        publisher: true,
-        copies: true,
         authors: true,
+        copies: options.relations?.copies || false,
+        publisher: true,
       },
       take: options.limit || 100,
       order: options.order || undefined,
@@ -50,12 +53,16 @@ export class BookRepository implements IBookRepository {
     return booksPersistenceData.map(BookMapper.toDomain);
   }
 
-  async findById(id: number): Promise<Book | null> {
+  async findById(id: number, options?: {
+    relations?: {
+      [key in 'copies']: boolean;
+    };
+  }): Promise<Book | null> {
     const bookPersistenceData = await this.bookTypeormRepository.findOne({
       where: { id },
       relations: {
         publisher: true,
-        copies: true,
+        copies: options?.relations?.copies || false,
         authors: true,
       },
     });
@@ -67,12 +74,16 @@ export class BookRepository implements IBookRepository {
     return BookMapper.toDomain(bookPersistenceData);
   }
 
-  async findByCode(code: BookCode): Promise<Book | null> {
+  async findByCode(code: BookCode, options?: {
+    relations?: {
+      [key in 'copies']: boolean;
+    };
+  }): Promise<Book | null> {
     const bookPersistenceData = await this.bookTypeormRepository.findOne({
       where: { code: code.value },
       relations: {
         publisher: true,
-        copies: true,
+        copies: options?.relations?.copies || false,
         authors: true,
       },
     });
@@ -84,7 +95,11 @@ export class BookRepository implements IBookRepository {
     return BookMapper.toDomain(bookPersistenceData);
   }
 
-  async save(book: Book): Promise<Book> {
+  async save(book: Book, options?: {
+    relations?: {
+      [key in 'copies']: boolean;
+    };
+  }): Promise<Book> {
     const { id } = await this.bookTypeormRepository.save({
       title: book.title.value,
       code: book.code.value,
@@ -111,7 +126,7 @@ export class BookRepository implements IBookRepository {
       where: { id },
       relations: {
         publisher: true, 
-        copies: true,
+        copies: options?.relations?.copies || false,
         authors: true,
       },
     });

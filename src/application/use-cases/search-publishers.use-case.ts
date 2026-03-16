@@ -1,4 +1,4 @@
-import { Publisher } from "@domain/entities/publisher.entity";
+import { PublisherSummary, PublisherSummaryMapper } from "@application/summary/publisher.summary";
 import type { ILogger } from "@domain/logger.interface";
 import type { IPublisherRepository } from "@domain/repositories/publisher.repository.interface";
 import { RepositoryOrderSelectionType } from "@domain/repositories/repository.interface";
@@ -21,7 +21,7 @@ export class SearchPublishersUseCase {
     private readonly logger: ILogger,
   ) {}
 
-  async execute(data: ISearchPublishersData, options: ISearchPublishersOptions): Promise<Publisher[]> {
+  async execute(data: ISearchPublishersData, options: ISearchPublishersOptions): Promise<PublisherSummary[]> {
     this.logger.info(this.loggerContext, "start");
     
     const findAllProps = {
@@ -35,7 +35,7 @@ export class SearchPublishersUseCase {
     const publishers = await this.publisherRepository.findAll(findAllProps, findAllOptions);
     
     this.logger.info(this.loggerContext, "end");
-    return publishers;
+    return PublisherSummaryMapper.toListSummary(publishers);
   }
 }
 

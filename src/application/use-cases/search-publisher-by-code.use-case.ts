@@ -1,4 +1,4 @@
-import { Publisher } from "@domain/entities/publisher.entity";
+import { PublisherSummary, PublisherSummaryMapper } from "@application/summary/publisher.summary";
 import type { IException } from "@domain/exception.interface";
 import type { ILogger } from "@domain/logger.interface";
 import type { IPublisherRepository } from "@domain/repositories/publisher.repository.interface";
@@ -14,7 +14,7 @@ export class SearchPublisherByCodeUseCase {
     private readonly logger: ILogger,
   ) {}
 
-  async execute(code: string): Promise<Publisher> {
+  async execute(code: string): Promise<PublisherSummary> {
     this.logger.info(this.loggerContext, "start");
     
     const publisher = await this.publisherRepository.findByCode(PublisherCode.create(code));
@@ -25,6 +25,6 @@ export class SearchPublisherByCodeUseCase {
     }
     
     this.logger.info(this.loggerContext, "end");
-    return publisher;
+    return PublisherSummaryMapper.toSummary(publisher);
   }
 }

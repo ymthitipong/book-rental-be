@@ -1,3 +1,4 @@
+import { BookSummary, BookSummaryMapper } from "@application/summary/book.summary";
 import { BookCategoryEnum } from "@domain/constant/book-category.constant";
 import { Book } from "@domain/entities/book.entity";
 import { IAuthorRepository } from "@domain/repositories/author.repository.interface";
@@ -27,7 +28,7 @@ export class CreateBookUseCase {
     publisherCode?: string;
     publicationDate?: string;
     title: string;
-  }): Promise<Book> {
+  }): Promise<BookSummary> {
     
     const publisher = data.publisherCode 
       ? await this.publisherRepository.findByCode(PublisherCode.create(data.publisherCode)) 
@@ -58,7 +59,7 @@ export class CreateBookUseCase {
     const savedBook = await this.bookRepository.save(book);
     await this.counterRepository.updateBookCounterNumber(counter + 1);
 
-    return savedBook;
+    return BookSummaryMapper.toSummary(savedBook);
   }
 }
 

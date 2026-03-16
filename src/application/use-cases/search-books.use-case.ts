@@ -1,4 +1,4 @@
-import { Book } from "@domain/entities/book.entity";
+import { BookSummary, BookSummaryMapper } from "@application/summary/book.summary";
 import type { ILogger } from "@domain/logger.interface";
 import type { IBookRepository } from "@domain/repositories/book.repository.interface";
 import { RepositoryOrderSelectionType } from "@domain/repositories/repository.interface";
@@ -27,7 +27,7 @@ export class SearchBooksUsecase {
   async execute(
     data: ISearchBooksData,
     options: ISearchBooksOptions,
-  ): Promise<Book[]> {
+  ): Promise<BookSummary[]> {
     this.logger.info(this.loggerContext, "start");
 
     const findAllProps = {
@@ -42,7 +42,7 @@ export class SearchBooksUsecase {
     const books = await this.bookRepository.findAll(findAllProps, findAllOptions);
     
     this.logger.info(this.loggerContext, "end");
-    return books;
+    return BookSummaryMapper.toListSummary(books);
   }
 }
 

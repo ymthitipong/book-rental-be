@@ -1,5 +1,5 @@
+import { AuthorSummary } from '@application/summary/author.summary';
 import { SearchAuthorsUseCase } from '@application/use-cases/search-authors.use-case';
-import { Author } from '@domain/entities/author.entity';
 import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
 import { Controller, Get, Inject, Query } from '@nestjs/common';
 import { IAuthorResponse, toAuthorResponse } from '@presenter/responses/author.response.dto';
@@ -14,7 +14,7 @@ export class AuthorsController {
   ) {}
 
   private toResponse(
-    authors: Author[],
+    authors: AuthorSummary[],
     options: {
       limit: number,
       order: 'name_asc' | 'name_desc'

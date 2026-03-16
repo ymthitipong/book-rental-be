@@ -1,6 +1,6 @@
+import { AuthorSummary } from '@application/summary/author.summary';
 import { CreateAuthorUseCase } from '@application/use-cases/create-author.use-case';
 import { SearchAuthorByCodeUseCase } from '@application/use-cases/search-author-by-code.use-case';
-import { Author } from '@domain/entities/author.entity';
 import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { IAuthorResponse, toAuthorResponse } from '@presenter/responses/author.response.dto';
@@ -16,7 +16,7 @@ export class AuthorController {
     private readonly searchAuthorByCodeUseCase: SearchAuthorByCodeUseCase,
   ) {}
 
-  private toResponse(author: Author): IAuthorResponse {
+  private toResponse(author: AuthorSummary): IAuthorResponse {
     return toAuthorResponse(author)
   }
 

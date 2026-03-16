@@ -1,3 +1,4 @@
+import { AuthorSummary, AuthorSummaryMapper } from "@application/summary/author.summary";
 import { Author } from "@domain/entities/author.entity";
 import type { IException } from "@domain/exception.interface";
 import type { ILogger } from "@domain/logger.interface";
@@ -17,7 +18,7 @@ export class CreateAuthorUseCase {
     private readonly logger: ILogger,
   ) {}
 
-  async execute(name: string, yearOfBirth: number): Promise<Author> {
+  async execute(name: string, yearOfBirth: number): Promise<AuthorSummary> {
     this.logger.info(this.loggerContext, "start");
 
     const counter = await this.counterRepository.getAuthorCounterNumber();
@@ -48,6 +49,6 @@ export class CreateAuthorUseCase {
 
     await this.counterRepository.updateAuthorCounterNumber(counter + 1);
 
-    return author;
+    return AuthorSummaryMapper.toSummary(author);
   }
 }

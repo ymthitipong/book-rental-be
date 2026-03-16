@@ -1,10 +1,11 @@
+import { BookSummary, BookSummaryWithCopies } from '@application/summary/book.summary';
 import { CreateBookUseCase } from '@application/use-cases/create-book.use-case';
 import { SearchBookByCodeUseCase } from '@application/use-cases/search-book-by-code.use-case';
-import { Book } from '@domain/entities/book.entity';
 import { UsecaseProxyModule } from '@infrastructure/usecase-proxy/usecase-proxy.module';
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
-import { IBookResponse, toBookResponse } from '@presenter/responses/book.response.dto';
+import { IBookResponse, toBookResponse, toBookResponseWithCopies } from '@presenter/responses/book.response.dto';
 import { CreateBookRequestBodyDto } from './create-book.request.dto';
+import { CreateCopiesByBookPararmsDto, CreateCopiesByBookRequestBodyDto } from './create-copies-by-book.request.dto';
 import { SearchBookByCodePararmsDto } from './search-book-by-code.request.dto';
 
 @Controller('book')
@@ -16,8 +17,12 @@ export class BookController {
     private readonly searchBookByCodeUseCase: SearchBookByCodeUseCase,
   ) {}
 
-  private toResponse(book: Book): IBookResponse {
+  private toResponse(book: BookSummary): IBookResponse {
     return toBookResponse(book);
+  }
+
+  private toResponseWithCopies(book: BookSummaryWithCopies): IBookResponse {
+    return toBookResponseWithCopies(book);
   }
 
   @Post()
@@ -32,12 +37,13 @@ export class BookController {
     return this.toResponse(book);
   }
 
-  // @Post(':code/copies')
-  // async createCopies(
-  //   @Param() params: CreateCopiesByBookPararmsDto, 
-  //   @Body() body: CreateCopiesByBookRequestBodyDto
-  // ): Promise<IBookResponse> {
+  @Post(':code/copies')
+  async createCopies(
+    @Param() params: CreateCopiesByBookPararmsDto, 
+    @Body() body: CreateCopiesByBookRequestBodyDto
+  ): Promise<IBookResponse> {
     
-  //   return this.toResponse(book);
-  // }
+    // return this.toResponse(book, true);
+    return this.toResponseWithCopies({} as BookSummaryWithCopies);
+  }
 }

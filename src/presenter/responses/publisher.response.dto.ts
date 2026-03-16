@@ -1,4 +1,4 @@
-import { Publisher } from '@domain/entities/publisher.entity';
+import { PublisherSummary } from '@application/summary/publisher.summary';
 
 export interface IPublisherResponse {
   object: 'publisher';
@@ -6,10 +6,10 @@ export interface IPublisherResponse {
   name: string;
 }
 
-export const toPublisherResponse = (publisher: Publisher): IPublisherResponse => {
+export const toPublisherResponse = (publisher: PublisherSummary): IPublisherResponse => {
   return {
     object: 'publisher',
-    code: publisher.code.value,
-    name: publisher.name.value,
+    code: publisher.code,
+    name: publisher.name,
   };
 };

@@ -1,17 +1,17 @@
-import { Author } from '@domain/entities/author.entity';
+import { AuthorSummary } from '@application/summary/author.summary';
 
 export interface IAuthorResponse {
   object: 'author';
   code: string;
   name: string;
-  yearOfBirth: number;
+  year_of_birth: number;
 }
 
-export const toAuthorResponse = (author: Author): IAuthorResponse => {
+export const toAuthorResponse = (author: AuthorSummary): IAuthorResponse => {
   return {
     object: 'author',
-    code: author.code.value,
-    name: author.name.value,
-    yearOfBirth: author.yearOfBirth,
+    code: author.code,
+    name: author.name,
+    year_of_birth: author.yearOfBirth,
   };
 }

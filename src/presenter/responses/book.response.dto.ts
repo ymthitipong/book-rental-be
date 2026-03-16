@@ -1,4 +1,4 @@
-import { Book } from '@domain/entities/book.entity';
+import { BookSummary, BookSummaryWithCopies } from '@application/summary/book.summary';
 import { IAuthorResponse, toAuthorResponse } from './author.response.dto';
 import { ICopyResponse, toCopyResponse } from './copy.response.dto';
 import { IPublisherResponse, toPublisherResponse } from './publisher.response.dto';
@@ -20,7 +20,7 @@ export interface IBookResponse {
   copies?: ICopyResponse[];
 }
 
-export const toBookResponse = (book: Book, withCopies: boolean = false): IBookResponse => {
+export const toBookResponse = (book: BookSummary): IBookResponse => {
   return {
     object: 'book',
     availableCopyCount: book.availableCopyCount,
@@ -29,16 +29,20 @@ export const toBookResponse = (book: Book, withCopies: boolean = false): IBookRe
       code: book.category.code,
       description: book.category.description,
     },
-    code: book.code.value,
+    code: book.code,
     description: book.description,
     publicationDate: book.publicationDate,
     publisher: book.publisher
       ? toPublisherResponse(book.publisher)
       : null,
-    title: book.title.value,
+    title: book.title,
     totalCopyCount: book.totalCopyCount,
-    copies: withCopies 
-      ? book.copies.map((copy) => toCopyResponse(copy)) 
-      : undefined,
+  };
+}
+
+export const toBookResponseWithCopies = (book: BookSummaryWithCopies): IBookResponse => {
+  return {
+    ...toBookResponse(book),
+    copies: book.copies.map((copy) => toCopyResponse(copy)),
   };
 }
