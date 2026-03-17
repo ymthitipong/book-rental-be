@@ -1,3 +1,7 @@
+import {
+  AuthorSummary,
+  AuthorSummaryMapper,
+} from "@application/summary/author.summary";
 import { Author } from "@domain/entities/author.entity";
 import type { IException } from "@domain/exception.interface";
 import type { ILogger } from "@domain/logger.interface";
@@ -17,16 +21,17 @@ export class CreateAuthorUseCase {
     private readonly logger: ILogger,
   ) {}
 
-  async execute(name: string, yearOfBirth: number): Promise<Author> {
+  async execute(name: string, yearOfBirth: number): Promise<AuthorSummary> {
     this.logger.info(this.loggerContext, "start");
 
     const counter = await this.counterRepository.getAuthorCounterNumber();
     if (counter === null) {
-      this.logger.error(this.loggerContext, "Failed to get author counter number");
-      throw this.exception.internalServerErrorException({
-        message: "Failed to get author counter number",
-      });
-    };
+      this.logger.error(
+        this.loggerContext,
+        "Failed to get author counter number",
+      );
+      throw this.exception.internalServerErrorException({message: "Failed to get author counter number",});
+    }
 
     const author = Author.create({
       code: AuthorCode.create(counter),
@@ -36,8 +41,8 @@ export class CreateAuthorUseCase {
     try {
       await this.authorRepository.save(author);
     } catch (error: unknown) {
-      console.log('error code', (error as any).detail);
-      console.log('error message', (error as any).message);
+      console.log("error code", (error as any).detail);
+      console.log("error message", (error as any).message);
       console.log(JSON.stringify(error as object));
       this.logger.error(this.loggerContext, "Failed to save to db");
       throw this.exception.internalServerErrorException({
@@ -48,6 +53,6 @@ export class CreateAuthorUseCase {
 
     await this.counterRepository.updateAuthorCounterNumber(counter + 1);
 
-    return author;
+    return AuthorSummaryMapper.toSummary(author);
   }
 }

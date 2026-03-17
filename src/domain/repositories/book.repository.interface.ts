@@ -1,8 +1,18 @@
-import { Book } from '@domain/entities/book.entity';
-import { AuthorName } from '@domain/value-object/author-name';
-import { BookCode } from '@domain/value-object/book-code';
-import { BookTitle } from '@domain/value-object/book-title';
-import { RepositoryOrderSelectionType } from './repository.interface';
+import { Book } from "@domain/entities/book.entity";
+import { AuthorName } from "@domain/value-object/author-name";
+import { BookCode } from "@domain/value-object/book-code";
+import { BookTitle } from "@domain/value-object/book-title";
+import { RepositoryOrderSelectionType } from "./repository.interface";
+
+export type OrderOptions = {
+  [key in "title"]: RepositoryOrderSelectionType;
+};
+
+export type UpdateData = {
+  lastCopyNo?: number;
+  totalCopyCount?: number;
+  availableCopyCount?: number;
+};
 
 export interface IBookRepository {
   findAll(
@@ -12,12 +22,11 @@ export interface IBookRepository {
     },
     options: {
       limit?: number;
-      order?: {
-        [key in 'title']: RepositoryOrderSelectionType;
-      };
+      order?: OrderOptions;
     },
   ): Promise<Book[]>;
-  findByCode(name: BookCode): Promise<Book | null>;
+  findByCode(code: BookCode): Promise<Book | null>;
   findById(id: number): Promise<Book | null>;
-  save(publisher: Book): Promise<Book>;
+  save(book: Book): Promise<void>;
+  updateById(id: number, updateData: UpdateData): Promise<void>;
 }

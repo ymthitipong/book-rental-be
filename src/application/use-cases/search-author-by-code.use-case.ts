@@ -1,4 +1,7 @@
-import { Author } from "@domain/entities/author.entity";
+import {
+  AuthorSummary,
+  AuthorSummaryMapper,
+} from "@application/summary/author.summary";
 import type { IException } from "@domain/exception.interface";
 import type { ILogger } from "@domain/logger.interface";
 import type { IAuthorRepository } from "@domain/repositories/author.repository.interface";
@@ -14,17 +17,17 @@ export class SearchAuthorByCodeUseCase {
     private readonly logger: ILogger,
   ) {}
 
-  async execute(code: string): Promise<Author> {
+  async execute(code: string): Promise<AuthorSummary> {
     this.logger.info(this.loggerContext, "start");
-    
-    const author = await this.authorRepository.findByCode(AuthorCode.create(code));
+
+    const author = await this.authorRepository.findByCode(
+      AuthorCode.create(code),
+    );
     if (author === null) {
-      throw this.exception.notFoundException({
-        message: "Author not found",
-      });
+      throw this.exception.notFoundException({ message: "Author not found" });
     }
-    
+
     this.logger.info(this.loggerContext, "end");
-    return author;
+    return AuthorSummaryMapper.toSummary(author);
   }
 }

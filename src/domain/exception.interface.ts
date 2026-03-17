@@ -1,8 +1,8 @@
-import { HttpException } from '@nestjs/common';
+import { HttpException } from "@nestjs/common";
 
 export interface IFormatExceptionMessage {
-  message: string;
   detail?: string;
+  message: string;
 }
 
 export interface IException {

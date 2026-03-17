@@ -1,6 +1,9 @@
 import { Book } from "@domain/entities/book.entity";
-import { IBookRepository } from "@domain/repositories/book.repository.interface";
-import { RepositoryOrderSelectionType } from "@domain/repositories/repository.interface";
+import {
+  IBookRepository,
+  OrderOptions,
+  UpdateData,
+} from "@domain/repositories/book.repository.interface";
 import { AuthorName } from "@domain/value-object/author-name";
 import { BookCode } from "@domain/value-object/book-code";
 import { BookTitle } from "@domain/value-object/book-title";
@@ -17,34 +20,31 @@ export class BookRepository implements IBookRepository {
     private readonly bookTypeormRepository: Repository<BookTypeormEntity>,
   ) {}
 
-  async findAll(data: {
-    title?: BookTitle;
-    authorName?: AuthorName;
-    category?: string;
-  }, options: {
-    limit?: number;
-    order?: {
-      [key in 'title']: RepositoryOrderSelectionType;
-    };
-  }): Promise<Book[]> {
-
+  async findAll(
+    data: {
+      title?: BookTitle;
+      authorName?: AuthorName;
+      category?: string;
+    },
+    options: {
+      limit?: number;
+      order?: OrderOptions;
+    },
+  ): Promise<Book[]> {
     const booksPersistenceData = await this.bookTypeormRepository.find({
-      where: {
-        title: data.title 
-          ? Like(`%${data.title.value}%`)
-          : undefined,
-        authors: data.authorName 
-          ? { name: Like(`%${data.authorName.value}%`) } 
-          : undefined,
-        category: data.category,
-      },
+      order: options.order || undefined,
       relations: {
-        publisher: true,
-        copies: true,
         authors: true,
+        publisher: true,
       },
       take: options.limit || 100,
-      order: options.order || undefined,
+      where: {
+        authors: data.authorName
+        ? { name: Like(`%${data.authorName.value}%`) }
+        : undefined,
+        category: data.category,
+        title: data.title ? Like(`%${data.title.value}%`) : undefined,
+      },
     });
 
     return booksPersistenceData.map(BookMapper.toDomain);
@@ -52,74 +52,60 @@ export class BookRepository implements IBookRepository {
 
   async findById(id: number): Promise<Book | null> {
     const bookPersistenceData = await this.bookTypeormRepository.findOne({
-      where: { id },
       relations: {
-        publisher: true,
-        copies: true,
         authors: true,
+        publisher: true,
       },
+      where: { id },
     });
-    
+
     if (!bookPersistenceData) {
       return null;
     }
-    
+
     return BookMapper.toDomain(bookPersistenceData);
   }
 
   async findByCode(code: BookCode): Promise<Book | null> {
     const bookPersistenceData = await this.bookTypeormRepository.findOne({
-      where: { code: code.value },
       relations: {
-        publisher: true,
-        copies: true,
         authors: true,
+        publisher: true,
       },
+      where: { code: code.value },
     });
-    
+
     if (!bookPersistenceData) {
       return null;
     }
-    
+
     return BookMapper.toDomain(bookPersistenceData);
   }
 
-  async save(book: Book): Promise<Book> {
-    const { id } = await this.bookTypeormRepository.save({
-      title: book.title.value,
-      code: book.code.value,
+  async save(book: Book): Promise<void> {
+    await this.bookTypeormRepository.save({
+      authors: book.authors
+      .filter(
+        (author): author is typeof author & { persistenceId: number } =>
+          author.persistenceId !== null,
+      )
+      .map((author) => ({ id: author.persistenceId })),
       category: book.category.code,
+      code: book.code.value,
       description: book.description,
       publicationDate: book.publicationDate,
       publisher: book.publisher?.persistenceId
-        ? { id: book.publisher.persistenceId } 
-        : null,
-      authors: book.authors
-        .filter(
-          (author): author is typeof author & { persistenceId: number } => 
-            author.persistenceId !== null
-        )
-        .map(
-          (author) => ({
-            id: author.persistenceId
-          })
-        )
+      ? { id: book.publisher.persistenceId }
+      : null,
+      title: book.title.value,
     });
+  }
 
-    // Todo: need adjustment for 2 db traffic -> only 1
-    const savedPersistenceData = await this.bookTypeormRepository.findOne({
-      where: { id },
-      relations: {
-        publisher: true, 
-        copies: true,
-        authors: true,
-      },
+  async updateById(id: number, updateData: UpdateData): Promise<void> {
+    const update = await this.bookTypeormRepository.update(id, {
+      availableCopyCount: updateData.availableCopyCount,
+      lastCopyNo: updateData.lastCopyNo,
+      totalCopyCount: updateData.totalCopyCount,
     });
-
-    if (!savedPersistenceData) {
-      throw new Error('Failed to create book');
-    }
-
-    return BookMapper.toDomain(savedPersistenceData);
   }
 }

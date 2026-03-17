@@ -1,48 +1,63 @@
-import { Book } from "@domain/entities/book.entity";
-
-import { BookCopyStatus } from "@domain/constant/book-copy-status.constant";
+import { BookCode } from "@domain/value-object/book-code";
+import { BookCopyStatus } from "@domain/value-object/book-copy-status.vo";
 
 interface BookCopyProps {
-  acquisitionDate: string;
-  book: Book;
-  code: number;
+  bookCode: BookCode;
+  no: number;
+  persistenceId?: number | null;
   status: BookCopyStatus;
 }
 
 export class BookCopy {
-  private readonly _book: Book;
-  private readonly _acquisitionDate: string;
-  private readonly _copy_no: number;
-  private readonly _status: BookCopyStatus;
+  private readonly _bookCode: BookCode;
+  private readonly _no: number;
+  private _status: BookCopyStatus;
+  private _persistenceId: number | null;
 
   private constructor(props: BookCopyProps) {
-    this._book = props.book;
-    this._acquisitionDate = props.acquisitionDate;
-    this._copy_no = props.code;
+    this._bookCode = props.bookCode;
+    this._no = props.no;
     this._status = props.status;
+    this._persistenceId = props.persistenceId ?? null;
   }
 
   static create(props: BookCopyProps): BookCopy {
     return new BookCopy(props);
   }
 
-  get acquisitionDate(): string {
-    return this._acquisitionDate;
+  get bookCode(): BookCode {
+    return this._bookCode;
   }
 
-  get book(): Book {
-    return this._book;
+  get code(): string {
+    return `${this._bookCode.value}-${this._no}`;
   }
 
-  get copyCode(): string {
-    return `${this.book.code}-${this.copyNo}`;
-  }
-
-  get copyNo(): number {
-    return this._copy_no;
+  get number(): number {
+    return this._no;
   }
 
   get status(): BookCopyStatus {
     return this._status;
+  }
+
+  get persistenceId(): number | null {
+    return this._persistenceId;
+  }
+
+  borrow() {
+    this._status = BookCopyStatus.borrow(this._status);
+  }
+
+  return() {
+    this._status = BookCopyStatus.return(this._status);
+  }
+
+  repair() {
+    this._status = BookCopyStatus.repair(this._status);
+  }
+
+  restore() {
+    this._status = BookCopyStatus.restore(this._status);
   }
 }

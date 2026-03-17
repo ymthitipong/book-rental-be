@@ -13,9 +13,9 @@ export type PublisherPersistence = Omit<
 export class PublisherMapper {
   static toDomain(typeorm: PublisherTypeormEntity): Publisher {
     return Publisher.create({
-      persistenceId: typeorm.id,
-      name: PublisherName.create(typeorm.name),
       code: PublisherCode.create(typeorm.code),
+      name: PublisherName.create(typeorm.name),
+      persistenceId: typeorm.id,
     });
   }
 }

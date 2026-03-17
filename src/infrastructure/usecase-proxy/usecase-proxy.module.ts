@@ -1,42 +1,60 @@
-import { CreateAuthorUseCase } from '@application/use-cases/create-author.use-case';
-import { CreateBookUseCase } from '@application/use-cases/create-book.use-case';
-import { CreatePublisherUseCase } from '@application/use-cases/create-publisher.use-case';
-import { SearchAuthorByCodeUseCase } from '@application/use-cases/search-author-by-code.use-case';
-import { SearchAuthorsUseCase } from '@application/use-cases/search-authors.use-case';
-import { SearchBookByCodeUseCase } from '@application/use-cases/search-book-by-code.use-case';
-import { SearchBooksUsecase } from '@application/use-cases/search-books.use-case';
-import { SearchPublisherByCodeUseCase } from '@application/use-cases/search-publisher-by-code.use-case';
-import { SearchPublishersUseCase } from '@application/use-cases/search-publishers.use-case';
-import { ExceptionsModule } from '@infrastructure/exception/exceptions.module';
-import { ExceptionsService } from '@infrastructure/exception/exceptions.service';
-import { LoggerModule } from '@infrastructure/logger/logger.module';
-import { LoggerService } from '@infrastructure/logger/logger.service';
-import { AuthorRepository } from '@infrastructure/persistence/repositories/author.repository';
-import { BookRepository } from '@infrastructure/persistence/repositories/book.repository';
-import { CounterRepository } from '@infrastructure/persistence/repositories/counter.repository';
-import { PublisherRepository } from '@infrastructure/persistence/repositories/publisher.repository';
-import { RepositoryModule } from '@infrastructure/persistence/repositories/repository.module';
-import { DynamicModule, Module } from '@nestjs/common';
+import { CreateAuthorUseCase } from "@application/use-cases/create-author.use-case";
+import { CreateBookUseCase } from "@application/use-cases/create-book.use-case";
+import { CreateCopiesByBookUseCase } from "@application/use-cases/create-copies-by-book.use-case";
+import { CreatePublisherUseCase } from "@application/use-cases/create-publisher.use-case";
+import { SearchAuthorByCodeUseCase } from "@application/use-cases/search-author-by-code.use-case";
+import { SearchAuthorsUseCase } from "@application/use-cases/search-authors.use-case";
+import { SearchBookByCodeUseCase } from "@application/use-cases/search-book-by-code.use-case";
+import { SearchBooksUsecase } from "@application/use-cases/search-books.use-case";
+import { SearchCopyByCodeUseCase } from "@application/use-cases/search-copy-by-code.use-case";
+import { SearchPublisherByCodeUseCase } from "@application/use-cases/search-publisher-by-code.use-case";
+import { SearchPublishersUseCase } from "@application/use-cases/search-publishers.use-case";
+import { UpdateCopyStatusUseCase } from "@application/use-cases/update-copy-status.use-case";
+import { ExceptionsModule } from "@infrastructure/exception/exceptions.module";
+import { ExceptionsService } from "@infrastructure/exception/exceptions.service";
+import { LoggerModule } from "@infrastructure/logger/logger.module";
+import { LoggerService } from "@infrastructure/logger/logger.service";
+import { AuthorRepository } from "@infrastructure/persistence/repositories/author.repository";
+import { BookCopyRepository } from "@infrastructure/persistence/repositories/book-copy.repository";
+import { BookRepository } from "@infrastructure/persistence/repositories/book.repository";
+import { CounterRepository } from "@infrastructure/persistence/repositories/counter.repository";
+import { PublisherRepository } from "@infrastructure/persistence/repositories/publisher.repository";
+import { RepositoryModule } from "@infrastructure/persistence/repositories/repository.module";
+import { DynamicModule, Module } from "@nestjs/common";
 
-@Module({ imports: [
-  ExceptionsModule,
-  RepositoryModule,
-  LoggerModule,
-]})
+@Module({ imports: [ExceptionsModule, RepositoryModule, LoggerModule] })
 export class UsecaseProxyModule {
-  static CREATE_AUTHOR = 'CREATE_AUTHOR';
-  static CREATE_PUBLISHER = 'CREATE_PUBLISHER';
-  static CREATE_BOOK = 'CREATE_BOOK';
-  static SEARCH_AUTHOR_BY_CODE = 'SEARCH_AUTHOR_BY_CODE';
-  static SEARCH_AUTHORS = 'SEARCH_AUTHORS';
-  static SEARCH_BOOK_BY_CODE = 'SEARCH_BOOK_BY_CODE';
-  static SEARCH_BOOKS = 'SEARCH_BOOKS';
-  static SEARCH_PUBLISHER_BY_CODE = 'SEARCH_PUBLISHER_BY_CODE';
-  static SEARCH_PUBLISHERS = 'SEARCH_PUBLISHERS';
+  static CREATE_AUTHOR = "CREATE_AUTHOR";
+  static CREATE_PUBLISHER = "CREATE_PUBLISHER";
+  static CREATE_BOOK = "CREATE_BOOK";
+  static CREATE_COPIES_BY_BOOK = "CREATE_COPIES_BY_BOOK";
+  static SEARCH_AUTHOR_BY_CODE = "SEARCH_AUTHOR_BY_CODE";
+  static SEARCH_AUTHORS = "SEARCH_AUTHORS";
+  static SEARCH_BOOK_BY_CODE = "SEARCH_BOOK_BY_CODE";
+  static SEARCH_BOOKS = "SEARCH_BOOKS";
+  static SEARCH_COPY_BY_CODE = "SEARCH_COPY_BY_CODE";
+  static SEARCH_PUBLISHER_BY_CODE = "SEARCH_PUBLISHER_BY_CODE";
+  static SEARCH_PUBLISHERS = "SEARCH_PUBLISHERS";
+  static UPDATE_COPY_STATUS = "UPDATE_COPY_STATUS";
 
   static register(): DynamicModule {
     return {
       module: UsecaseProxyModule,
+      // eslint-disable-next-line sort-keys
+      exports: [
+        UsecaseProxyModule.CREATE_AUTHOR,
+        UsecaseProxyModule.CREATE_PUBLISHER,
+        UsecaseProxyModule.CREATE_BOOK,
+        UsecaseProxyModule.CREATE_COPIES_BY_BOOK,
+        UsecaseProxyModule.SEARCH_AUTHOR_BY_CODE,
+        UsecaseProxyModule.SEARCH_AUTHORS,
+        UsecaseProxyModule.SEARCH_BOOK_BY_CODE,
+        UsecaseProxyModule.SEARCH_BOOKS,
+        UsecaseProxyModule.SEARCH_COPY_BY_CODE,
+        UsecaseProxyModule.SEARCH_PUBLISHER_BY_CODE,
+        UsecaseProxyModule.SEARCH_PUBLISHERS,
+        UsecaseProxyModule.UPDATE_COPY_STATUS,
+      ],
       providers: [
         {
           inject: [
@@ -102,44 +120,29 @@ export class UsecaseProxyModule {
             ),
         },
         {
-          inject: [
-            BookRepository,
-            ExceptionsService,
-            LoggerService,
-          ],
-          provide: UsecaseProxyModule.SEARCH_BOOK_BY_CODE,
+          inject: [BookRepository, BookCopyRepository, LoggerService],
+          provide: UsecaseProxyModule.CREATE_COPIES_BY_BOOK,
           useFactory: (
             bookRepository: BookRepository,
-            exceptionsService: ExceptionsService,
+            bookCopyRepository: BookCopyRepository,
             loggerService: LoggerService,
           ) =>
-            new SearchBookByCodeUseCase(
+            new CreateCopiesByBookUseCase(
               bookRepository,
-              exceptionsService,
+              bookCopyRepository,
               loggerService,
             ),
         },
         {
-          inject: [
-            BookRepository,
-            LoggerService,
-          ],
-          provide: UsecaseProxyModule.SEARCH_BOOKS,
+          inject: [AuthorRepository, LoggerService],
+          provide: UsecaseProxyModule.SEARCH_AUTHORS,
           useFactory: (
-            bookRepository: BookRepository,
+            authorRepository: AuthorRepository,
             loggerService: LoggerService,
-          ) =>
-            new SearchBooksUsecase(
-              bookRepository,
-              loggerService,
-            ),
+          ) => new SearchAuthorsUseCase(authorRepository, loggerService),
         },
         {
-          inject: [
-            AuthorRepository,
-            ExceptionsService,
-            LoggerService,
-          ],
+          inject: [AuthorRepository, ExceptionsService, LoggerService],
           provide: UsecaseProxyModule.SEARCH_AUTHOR_BY_CODE,
           useFactory: (
             authorRepository: AuthorRepository,
@@ -153,26 +156,54 @@ export class UsecaseProxyModule {
             ),
         },
         {
-          inject: [
-            AuthorRepository,
-            LoggerService,
-          ],
-          provide: UsecaseProxyModule.SEARCH_AUTHORS,
+          inject: [BookRepository, LoggerService],
+          provide: UsecaseProxyModule.SEARCH_BOOKS,
           useFactory: (
-            authorRepository: AuthorRepository,
+            bookRepository: BookRepository,
+            loggerService: LoggerService,
+          ) => new SearchBooksUsecase(bookRepository, loggerService),
+        },
+        {
+          inject: [BookRepository, BookCopyRepository, ExceptionsService, LoggerService],
+          provide: UsecaseProxyModule.SEARCH_BOOK_BY_CODE,
+          useFactory: (
+            bookRepository: BookRepository,
+            bookCopyRepository: BookCopyRepository,
+            exceptionsService: ExceptionsService,
             loggerService: LoggerService,
           ) =>
-            new SearchAuthorsUseCase(
-              authorRepository,
+            new SearchBookByCodeUseCase(
+              bookRepository,
+              bookCopyRepository,
+              exceptionsService,
               loggerService,
             ),
         },
         {
-          inject: [
-            PublisherRepository,
-            ExceptionsService,
-            LoggerService,
-          ],
+          inject: [BookRepository, BookCopyRepository, ExceptionsService, LoggerService],
+          provide: UsecaseProxyModule.SEARCH_COPY_BY_CODE,
+          useFactory: (
+            bookRepository: BookRepository,
+            bookCopyRepository: BookCopyRepository,
+            exceptionsService: ExceptionsService,
+            loggerService: LoggerService,
+          ) => new SearchCopyByCodeUseCase(
+            bookRepository,
+            bookCopyRepository,
+            exceptionsService,
+            loggerService,
+          ),
+        },        
+        {
+          inject: [PublisherRepository, LoggerService],
+          provide: UsecaseProxyModule.SEARCH_PUBLISHERS,
+          useFactory: (
+            publisherRepository: PublisherRepository,
+            loggerService: LoggerService,
+          ) => new SearchPublishersUseCase(publisherRepository, loggerService),
+        },
+        {
+          inject: [PublisherRepository, ExceptionsService, LoggerService],
           provide: UsecaseProxyModule.SEARCH_PUBLISHER_BY_CODE,
           useFactory: (
             publisherRepository: PublisherRepository,
@@ -186,31 +217,21 @@ export class UsecaseProxyModule {
             ),
         },
         {
-          inject: [
-            PublisherRepository,
-            LoggerService,
-          ],
-          provide: UsecaseProxyModule.SEARCH_PUBLISHERS,
+          inject: [BookRepository, BookCopyRepository, ExceptionsService, LoggerService],
+          provide: UsecaseProxyModule.UPDATE_COPY_STATUS,
           useFactory: (
-            publisherRepository: PublisherRepository,
+            bookRepository: BookRepository,
+            bookCopyRepository: BookCopyRepository,
+            exceptionsService: ExceptionsService,
             loggerService: LoggerService,
           ) =>
-            new SearchPublishersUseCase(
-              publisherRepository,
+            new UpdateCopyStatusUseCase(
+              bookRepository,
+              bookCopyRepository,
+              exceptionsService,
               loggerService,
             ),
         },
-      ],
-      exports: [
-        UsecaseProxyModule.CREATE_AUTHOR,
-        UsecaseProxyModule.CREATE_PUBLISHER,
-        UsecaseProxyModule.CREATE_BOOK,
-        UsecaseProxyModule.SEARCH_AUTHOR_BY_CODE,
-        UsecaseProxyModule.SEARCH_AUTHORS,
-        UsecaseProxyModule.SEARCH_BOOK_BY_CODE,
-        UsecaseProxyModule.SEARCH_BOOKS,
-        UsecaseProxyModule.SEARCH_PUBLISHER_BY_CODE,
-        UsecaseProxyModule.SEARCH_PUBLISHERS,
       ],
     };
   }

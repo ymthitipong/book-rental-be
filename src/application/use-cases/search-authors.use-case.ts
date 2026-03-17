@@ -1,4 +1,7 @@
-import { Author } from "@domain/entities/author.entity";
+import {
+  AuthorSummary,
+  AuthorSummaryMapper,
+} from "@application/summary/author.summary";
 import type { ILogger } from "@domain/logger.interface";
 import type { IAuthorRepository } from "@domain/repositories/author.repository.interface";
 import { RepositoryOrderSelectionType } from "@domain/repositories/repository.interface";
@@ -21,29 +24,35 @@ export class SearchAuthorsUseCase {
     private readonly logger: ILogger,
   ) {}
 
-  async execute(data: ISearchAuthorsData, options: ISearchAuthorsOptions): Promise<Author[]> {
+  async execute(
+    data: ISearchAuthorsData,
+    options: ISearchAuthorsOptions,
+  ): Promise<AuthorSummary[]> {
     this.logger.info(this.loggerContext, "start");
 
-    const findAllProps = {
-      name: data.name ? AuthorName.create(data.name) : undefined,
-    };
+    const findAllProps = {name: data.name ? AuthorName.create(data.name) : undefined,};
     const findAllOptions = {
       limit: options.limit,
       order: toAuthorRepositoryOrder(options.order),
     };
-    
-    const publishers = await this.authorRepository.findAll(findAllProps, findAllOptions);
-    
+
+    const authors = await this.authorRepository.findAll(
+      findAllProps,
+      findAllOptions,
+    );
+
     this.logger.info(this.loggerContext, "end");
-    return publishers;
+    return AuthorSummaryMapper.toSummaryList(authors);
   }
 }
 
-const toAuthorRepositoryOrder = (usecaseOrder: string): { ['name']: RepositoryOrderSelectionType } => {
+const toAuthorRepositoryOrder = (
+  usecaseOrder: string,
+): { ["name"]: RepositoryOrderSelectionType } => {
   switch (usecaseOrder) {
-    case 'name_desc':
-      return { name: 'desc' };
+    case "name_desc":
+      return { name: "desc" };
     default:
-      return { name: 'asc' };
+      return { name: "asc" };
   }
-}
+};

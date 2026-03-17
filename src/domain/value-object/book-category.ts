@@ -1,4 +1,7 @@
-import { BookCategoryEnum, getBookCategoryDescription } from "@domain/constant/book-category.constant";
+import {
+  BookCategoryEnum,
+  getBookCategoryDescription,
+} from "@domain/constant/book-category.constant";
 
 export class BookCategory {
   private readonly _value: BookCategoryEnum;
@@ -11,11 +14,11 @@ export class BookCategory {
     return new BookCategory(category);
   }
 
-  get code(): string {   
+  get code(): string {
     return this._value.toString();
   }
 
   get description(): string {
-    return getBookCategoryDescription(this._value)
+    return getBookCategoryDescription(this._value);
   }
 }

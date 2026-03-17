@@ -1,15 +1,11 @@
-export enum BookCopyStatus {
-  AVAILABLE = 'A',
-  BORROWED = 'B',
-  UNAVAILABLE = 'U',
+export enum BookCopyStatusEnum {
+  AVAILABLE = "A",
+  BORROWED = "B",
+  UNAVAILABLE = "U",
 }
 
-export const getBookCopyStatusName = (status: BookCopyStatus): string => {
-  const statusNames = {
-    [BookCopyStatus.AVAILABLE]: 'Available',
-    [BookCopyStatus.BORROWED]: 'Borrowed',
-    [BookCopyStatus.UNAVAILABLE]: 'Unavailable',
-  };
-  
-  return statusNames[status] || 'Unknown';
+export const bookCopyStatusDesciption: Record<BookCopyStatusEnum, string> = {
+  [BookCopyStatusEnum.AVAILABLE]: "Available",
+  [BookCopyStatusEnum.BORROWED]: "Borrowed",
+  [BookCopyStatusEnum.UNAVAILABLE]: "Unavailable",
 };

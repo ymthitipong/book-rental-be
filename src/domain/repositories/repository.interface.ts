@@ -1,1 +1,1 @@
-export type RepositoryOrderSelectionType = 'asc' | 'desc';
+export type RepositoryOrderSelectionType = "asc" | "desc";

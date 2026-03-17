@@ -15,7 +15,7 @@ export class Publisher {
   protected constructor(props: PublisherProps) {
     this._code = props.code;
     this._name = props.name;
-    this._persistenceId = props.persistenceId || null;
+    this._persistenceId = props.persistenceId ?? null;
   }
 
   static create(props: PublisherProps): Publisher {
