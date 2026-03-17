@@ -5,6 +5,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { BookCopyMapper } from "../mapper/book-copy.mapper";
+import { BookCopyStatus } from "@domain/value-object/book-copy-status.vo";
 
 @Injectable()
 export class BookCopyRepository implements IBookCopyRepository {
@@ -60,4 +61,9 @@ export class BookCopyRepository implements IBookCopyRepository {
       })),
     );
   }
+
+  async updateStatus(id: number, status: BookCopyStatus): Promise<void> {
+    await this.bookCopyTypeormRepository.update(id, { status: status.value });
+  }
 }
+

@@ -6,9 +6,10 @@ import { SearchAuthorByCodeUseCase } from "@application/use-cases/search-author-
 import { SearchAuthorsUseCase } from "@application/use-cases/search-authors.use-case";
 import { SearchBookByCodeUseCase } from "@application/use-cases/search-book-by-code.use-case";
 import { SearchBooksUsecase } from "@application/use-cases/search-books.use-case";
-import { SearchCopyByCodeUseCase } from "@application/use-cases/search-copy-by-code.usecase";
+import { SearchCopyByCodeUseCase } from "@application/use-cases/search-copy-by-code.use-case";
 import { SearchPublisherByCodeUseCase } from "@application/use-cases/search-publisher-by-code.use-case";
 import { SearchPublishersUseCase } from "@application/use-cases/search-publishers.use-case";
+import { UpdateCopyStatusUseCase } from "@application/use-cases/update-copy-status.use-case";
 import { ExceptionsModule } from "@infrastructure/exception/exceptions.module";
 import { ExceptionsService } from "@infrastructure/exception/exceptions.service";
 import { LoggerModule } from "@infrastructure/logger/logger.module";
@@ -34,6 +35,7 @@ export class UsecaseProxyModule {
   static SEARCH_COPY_BY_CODE = "SEARCH_COPY_BY_CODE";
   static SEARCH_PUBLISHER_BY_CODE = "SEARCH_PUBLISHER_BY_CODE";
   static SEARCH_PUBLISHERS = "SEARCH_PUBLISHERS";
+  static UPDATE_COPY_STATUS = "UPDATE_COPY_STATUS";
 
   static register(): DynamicModule {
     return {
@@ -51,6 +53,7 @@ export class UsecaseProxyModule {
         UsecaseProxyModule.SEARCH_COPY_BY_CODE,
         UsecaseProxyModule.SEARCH_PUBLISHER_BY_CODE,
         UsecaseProxyModule.SEARCH_PUBLISHERS,
+        UsecaseProxyModule.UPDATE_COPY_STATUS,
       ],
       providers: [
         {
@@ -209,6 +212,22 @@ export class UsecaseProxyModule {
           ) =>
             new SearchPublisherByCodeUseCase(
               publisherRepository,
+              exceptionsService,
+              loggerService,
+            ),
+        },
+        {
+          inject: [BookRepository, BookCopyRepository, ExceptionsService, LoggerService],
+          provide: UsecaseProxyModule.UPDATE_COPY_STATUS,
+          useFactory: (
+            bookRepository: BookRepository,
+            bookCopyRepository: BookCopyRepository,
+            exceptionsService: ExceptionsService,
+            loggerService: LoggerService,
+          ) =>
+            new UpdateCopyStatusUseCase(
+              bookRepository,
+              bookCopyRepository,
               exceptionsService,
               loggerService,
             ),
