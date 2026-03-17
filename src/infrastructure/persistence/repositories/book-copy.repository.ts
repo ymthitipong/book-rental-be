@@ -13,13 +13,26 @@ export class BookCopyRepository implements IBookCopyRepository {
     private readonly bookCopyTypeormRepository: Repository<BookCopyTypeormEntity>,
   ) {}
 
-  async findByBookId(bookId: number): Promise<BookCopy[]> {
+  async findAllByBookId(bookId: number): Promise<BookCopy[]> {
     const persistenceData = await this.bookCopyTypeormRepository.find({
       relations: { book: true },
       where: { book: { id: bookId } },
     });
 
     return persistenceData.map((data) => BookCopyMapper.toDomain(data));
+  }
+
+  async findByBookIdAndNo(bookId: number, no: number): Promise<BookCopy | null> {
+    const persistenceData = await this.bookCopyTypeormRepository.findOne({
+      relations: { book: true },
+      where: { book: { id: bookId }, no },
+    });
+
+    if (!persistenceData) {
+      return null;
+    }
+
+    return BookCopyMapper.toDomain(persistenceData);
   }
 
   async findById(id: number): Promise<BookCopy | null> {

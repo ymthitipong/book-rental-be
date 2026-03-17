@@ -4,6 +4,7 @@ import { AuthorController } from "@presenter/controllers/author/author.controlle
 import { AuthorsController } from "@presenter/controllers/author/authors.controller";
 import { BookController } from "@presenter/controllers/book/book.controller";
 import { BooksController } from "@presenter/controllers/book/books.controller";
+import { CopyController } from "@presenter/controllers/copy/copy.controller";
 import { PublisherController } from "@presenter/controllers/publisher/publisher.controller";
 import { PublishersController } from "@presenter/controllers/publisher/publishers.controller";
 
@@ -13,6 +14,7 @@ import { PublishersController } from "@presenter/controllers/publisher/publisher
     AuthorsController,
     BookController,
     BooksController,
+    CopyController,
     PublisherController,
     PublishersController,
   ],

@@ -5,7 +5,8 @@ type RelationOptions = {
 };
 
 export interface IBookCopyRepository {
-  findByBookId(bookId: number): Promise<BookCopy[]>;
+  findAllByBookId(bookId: number): Promise<BookCopy[]>;
+  findByBookIdAndNo(bookId: number, no: number): Promise<BookCopy | null>;
   findById(
     id: number,
     options?: {

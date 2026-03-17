@@ -27,7 +27,7 @@ export class SearchBookByCodeUseCase {
     }
 
     if (withCopies) {
-      const copies = await this.bookCopyRepository.findByBookId(book!.persistenceId!);
+      const copies = await this.bookCopyRepository.findAllByBookId(book!.persistenceId!);
       book!.addCopies(copies);
     }
 
