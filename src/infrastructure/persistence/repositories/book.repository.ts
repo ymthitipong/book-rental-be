@@ -107,7 +107,5 @@ export class BookRepository implements IBookRepository {
       lastCopyNo: updateData.lastCopyNo,
       totalCopyCount: updateData.totalCopyCount,
     });
-
-    console.log('update', update)
   }
 }

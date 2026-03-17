@@ -4,8 +4,8 @@ import {
 } from "@application/summary/book.summary";
 import type { IException } from "@domain/exception.interface";
 import type { ILogger } from "@domain/logger.interface";
-import type { IBookRepository } from "@domain/repositories/book.repository.interface";
 import type { IBookCopyRepository } from "@domain/repositories/book-copy.repository.interface";
+import type { IBookRepository } from "@domain/repositories/book.repository.interface";
 import { BookCode } from "@domain/value-object/book-code";
 
 export class SearchBookByCodeUseCase {
@@ -20,10 +20,8 @@ export class SearchBookByCodeUseCase {
 
   async execute(code: string, withCopies: boolean = false): Promise<BookSummaryWithCopies> {
     this.logger.info(this.loggerContext, "start");
-    console.log("code", code);
 
     const book = await this.bookRepository.findByCode(BookCode.create(code));
-    console.log(this.loggerContext, "book", book);
     if (book === null) {
       throw this.exception.notFoundException({ message: "book not found" });
     }
