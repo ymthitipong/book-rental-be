@@ -102,6 +102,10 @@ export class Book {
     return this._lastCopyNo;
   }
 
+  addCopies(copies: BookCopy[]): void {
+    this._copies.push(...copies);
+  }
+
   createNewCopies(count: number): BookCopy[] {
     console.log("lastCopyNo", this._lastCopyNo);
     const fromNo = (this._lastCopyNo ?? -1) + 1;
@@ -118,7 +122,7 @@ export class Book {
     this._lastCopyNo = fromNo + count - 1;
     this._totalCopyCount += count;
     this._availableCopyCount += count;
-    
+
     return newCopies;
   }
 }

@@ -128,15 +128,17 @@ export class UsecaseProxyModule {
             ),
         },
         {
-          inject: [BookRepository, ExceptionsService, LoggerService],
+          inject: [BookRepository, BookCopyRepository, ExceptionsService, LoggerService],
           provide: UsecaseProxyModule.SEARCH_BOOK_BY_CODE,
           useFactory: (
             bookRepository: BookRepository,
+            bookCopyRepository: BookCopyRepository,
             exceptionsService: ExceptionsService,
             loggerService: LoggerService,
           ) =>
             new SearchBookByCodeUseCase(
               bookRepository,
+              bookCopyRepository,
               exceptionsService,
               loggerService,
             ),

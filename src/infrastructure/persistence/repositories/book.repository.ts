@@ -2,7 +2,6 @@ import { Book } from "@domain/entities/book.entity";
 import {
   IBookRepository,
   OrderOptions,
-  RelationOptions,
   UpdateData,
 } from "@domain/repositories/book.repository.interface";
 import { AuthorName } from "@domain/value-object/author-name";
@@ -30,14 +29,12 @@ export class BookRepository implements IBookRepository {
     options: {
       limit?: number;
       order?: OrderOptions;
-      relations?: RelationOptions;
     },
   ): Promise<Book[]> {
     const booksPersistenceData = await this.bookTypeormRepository.find({
       order: options.order || undefined,
       relations: {
         authors: true,
-        copies: options.relations?.copies || false,
         publisher: true,
       },
       take: options.limit || 100,
@@ -53,16 +50,10 @@ export class BookRepository implements IBookRepository {
     return booksPersistenceData.map(BookMapper.toDomain);
   }
 
-  async findById(
-    id: number,
-    options?: {
-      relations?: RelationOptions;
-    },
-  ): Promise<Book | null> {
+  async findById(id: number): Promise<Book | null> {
     const bookPersistenceData = await this.bookTypeormRepository.findOne({
       relations: {
         authors: true,
-        copies: options?.relations?.copies || false,
         publisher: true,
       },
       where: { id },
@@ -75,16 +66,10 @@ export class BookRepository implements IBookRepository {
     return BookMapper.toDomain(bookPersistenceData);
   }
 
-  async findByCode(
-    code: BookCode,
-    options?: {
-      relations?: RelationOptions;
-    },
-  ): Promise<Book | null> {
+  async findByCode(code: BookCode): Promise<Book | null> {
     const bookPersistenceData = await this.bookTypeormRepository.findOne({
       relations: {
         authors: true,
-        copies: options?.relations?.copies || false,
         publisher: true,
       },
       where: { code: code.value },

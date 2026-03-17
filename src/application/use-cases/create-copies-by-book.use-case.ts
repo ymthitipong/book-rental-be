@@ -29,12 +29,7 @@ export class CreateCopiesByBookUseCase {
   }> {
     this.logger.info(this.loggerContext, "start");
 
-    const book = await this.bookRepository.findByCode(
-      BookCode.create(bookCode),
-      { relations: { copies: false } },
-    );
-
-    console.log(book);
+    const book = await this.bookRepository.findByCode(BookCode.create(bookCode));
 
     if (!book) {
       throw new Error("Book not found");

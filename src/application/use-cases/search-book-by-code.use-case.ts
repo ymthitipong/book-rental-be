@@ -1,10 +1,11 @@
 import {
-  BookSummary,
   BookSummaryMapper,
+  BookSummaryWithCopies
 } from "@application/summary/book.summary";
 import type { IException } from "@domain/exception.interface";
 import type { ILogger } from "@domain/logger.interface";
 import type { IBookRepository } from "@domain/repositories/book.repository.interface";
+import type { IBookCopyRepository } from "@domain/repositories/book-copy.repository.interface";
 import { BookCode } from "@domain/value-object/book-code";
 
 export class SearchBookByCodeUseCase {
@@ -12,13 +13,14 @@ export class SearchBookByCodeUseCase {
 
   constructor(
     private readonly bookRepository: IBookRepository,
-
+    private readonly bookCopyRepository: IBookCopyRepository,
     private readonly exception: IException,
     private readonly logger: ILogger,
   ) {}
 
-  async execute(code: string): Promise<BookSummary> {
+  async execute(code: string, withCopies: boolean = false): Promise<BookSummaryWithCopies> {
     this.logger.info(this.loggerContext, "start");
+    console.log("code", code);
 
     const book = await this.bookRepository.findByCode(BookCode.create(code));
     console.log(this.loggerContext, "book", book);
@@ -26,7 +28,12 @@ export class SearchBookByCodeUseCase {
       throw this.exception.notFoundException({ message: "book not found" });
     }
 
+    if (withCopies) {
+      const copies = await this.bookCopyRepository.findByBookId(book!.persistenceId!);
+      book!.addCopies(copies);
+    }
+
     this.logger.info(this.loggerContext, "end");
-    return BookSummaryMapper.toSummary(book);
+    return BookSummaryMapper.toSummaryWithCopies(book);
   }
 }

@@ -4,10 +4,6 @@ import { BookCode } from "@domain/value-object/book-code";
 import { BookTitle } from "@domain/value-object/book-title";
 import { RepositoryOrderSelectionType } from "./repository.interface";
 
-export type RelationOptions = {
-  [key in "copies"]: boolean;
-};
-
 export type OrderOptions = {
   [key in "title"]: RepositoryOrderSelectionType;
 };
@@ -27,26 +23,10 @@ export interface IBookRepository {
     options: {
       limit?: number;
       order?: OrderOptions;
-      relations?: RelationOptions;
     },
   ): Promise<Book[]>;
-  findByCode(
-    code: BookCode,
-    options?: {
-      relations?: RelationOptions;
-    },
-  ): Promise<Book | null>;
-  findById(
-    id: number,
-    options?: {
-      relations?: RelationOptions;
-    },
-  ): Promise<Book | null>;
-  save(
-    book: Book,
-    options?: {
-      relations?: RelationOptions;
-    },
-  ): Promise<void>;
+  findByCode(code: BookCode): Promise<Book | null>;
+  findById(id: number): Promise<Book | null>;
+  save(book: Book): Promise<void>;
   updateById(id: number, updateData: UpdateData): Promise<void>;
 }

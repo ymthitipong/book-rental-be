@@ -1,11 +1,11 @@
 import { BookCopySummary } from "@application/summary/book-copy.summary";
-import { BookSummary } from "@application/summary/book.summary";
+import { BookSummary, BookSummaryWithCopies } from "@application/summary/book.summary";
 import { CreateBookUseCase } from "@application/use-cases/create-book.use-case";
 import { CreateCopiesByBookUseCase } from "@application/use-cases/create-copies-by-book.use-case";
 import { SearchBookByCodeUseCase } from "@application/use-cases/search-book-by-code.use-case";
 import { UsecaseProxyModule } from "@infrastructure/usecase-proxy/usecase-proxy.module";
 import {
- Body, Controller, Get, Inject, Param, Post 
+  Body, Controller, Get, Inject, Param, Post
 } from "@nestjs/common";
 import {
   IBookResponse,
@@ -30,7 +30,7 @@ export class BookController {
     private readonly createCopiesByBookUseCase: CreateCopiesByBookUseCase,
   ) {}
 
-  private toResponse(book: BookSummary): IBookResponse {
+  private toResponse(book: BookSummary | BookSummaryWithCopies): IBookResponse {
     return toBookResponse(book);
   }
 
@@ -55,6 +55,15 @@ export class BookController {
   ): Promise<IBookResponse> {
     const book = await this.searchBookByCodeUseCase.execute(params.code);
     return this.toResponse(book);
+  }
+
+  @Get(":code/copies")
+  async searchByCodeWithCopies(
+    @Param() params: SearchBookByCodePararmsDto,
+  ): Promise<IBookResponse> {
+    console.log("params", params);
+    const book = await this.searchBookByCodeUseCase.execute(params.code, true);
+    return this.toResponseWithCopies(book, book.copies);
   }
 
   @Post(":code/copies")
